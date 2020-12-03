@@ -10,6 +10,5 @@ public class Panel extends JPanel {
 		
 		this.setBackground(Color.CYAN);
 	}
-	
 
 }
