@@ -36,8 +36,11 @@ public class InstanceMatrix {
         for (int i = 0; instaceLine != null; ++i) {
 
             // Jump the third line (no useful infos there)
-            if (i == 2)
+            if (i == 2 || (i >= 2 && i == 3 + this.dimension)) {
+                // Read another line
+                instaceLine = br.readLine();
                 continue;
+            }
 
             // Put all elements, separated by a space, of the line into an array
             String[] lineArray = instaceLine.split(" ");
@@ -49,7 +52,7 @@ public class InstanceMatrix {
                 // Data files has always matrix dimension as second parameter
                 if (i == 1) {
                     try {
-                        this.dimension = Integer.parseInt(lineArray[2]);
+                        this.dimension = Integer.parseInt(lineArray[2].substring(0, lineArray[2].length() - 1));
 
                         if(this.dimension <= 0)
                             throw new InvalidInstanceDimensionException("Matrix dimension is not valid");
@@ -64,7 +67,7 @@ public class InstanceMatrix {
 
                     // Data files has always star number as first parameter
                     try {
-                        this.starsNumber = Integer.parseInt(lineArray[2]);
+                        this.starsNumber = Integer.parseInt(lineArray[2].substring(0, lineArray[2].length() - 1));
 
                         if(this.starsNumber <= 0)
                             throw new InvalidStarsNumberException("Stars number is not valid");
@@ -75,10 +78,11 @@ public class InstanceMatrix {
                 }
 
             } else {
+
                 for (int j = 0; j < this.dimension; ++j) {
                     try {
                         // Remove the comma or the pipe after the sector value
-                        this.sectorsMatrix[i - 3][j] = Integer.parseInt(lineArray[i].substring(0, lineArray.length - 2));
+                        this.sectorsMatrix[i - 3][j] = Integer.parseInt(lineArray[j].substring(0, lineArray[j].length() - 1));
                     } catch (NumberFormatException e) {
                         throw new InvalidSectorValueException("Sector value is not valid");
                     }
