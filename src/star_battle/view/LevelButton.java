@@ -1,0 +1,42 @@
+package star_battle.view;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+public class LevelButton extends JLabel implements MouseListener {
+
+    public LevelButton(){
+        setBackground(Color.WHITE);
+        setOpaque(true);
+
+        setHorizontalAlignment(CENTER);
+        setFont(new Font("Serif", Font.BOLD, 30));
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
+        this.addMouseListener(this);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(50,50);
+    }
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {}
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //TODO aprire il gioco
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
+}

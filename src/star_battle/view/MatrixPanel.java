@@ -17,10 +17,10 @@ public class MatrixPanel extends JPanel {
         this.controller = controller;
         setLayout(new GridBagLayout());
         setOpaque(false);
-        generateMatrix();
+        generateMatrix(rows);
     }
 
-    public void generateMatrix() {
+    public void generateMatrix(int rows) {
 
         GridBagConstraints gbc = new GridBagConstraints();
         for (int i = 0; i < rows; i++) {
@@ -33,6 +33,7 @@ public class MatrixPanel extends JPanel {
         }
 
     }
+
     public void manageLabel(int i, int j, Cell l, GridBagConstraints gbc) {
         int thickBorder = 5;
 
