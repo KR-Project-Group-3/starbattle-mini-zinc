@@ -1,91 +1,46 @@
 package star_battle.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JSplitPane;
+import java.awt.*;
+import javax.swing.*;
 
 import star_battle.controller.Controller;
 
 public class Frame extends JFrame {
 	
-	private static int WIDTH = 1000;
-	private static int HEIGHT = 1000;
+	private static final int WIDTH = 800;
+	private static final int HEIGHT = 600;
 	
 	private int dim = 5;
+
+	private JSplitPane mainPanel = null;
 	
-	private Controller controller;
-	
-	private Panel logoPanel;
-	private Panel matrixPanel;
-	private Panel buttonsPanel;
-	
+	private JPanel matrixPanel;
+	private JPanel buttonsPanel;
+
 	public Frame(Controller controller) {
-		
-		this.controller = controller;
-		
-		this.logoPanel = new Panel();
-		this.matrixPanel = new Panel();
-		this.buttonsPanel = new Panel();
-		
-		matrixPanel.setBackground(Color.white);
-		matrixPanel.setLayout(new GridLayout(dim, dim));
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
-            	Label l = new Label();
-            	this.manageLabel(i, j, l);
-            	
-            }
-        }
-		
-		JSplitPane internalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, matrixPanel, buttonsPanel);
-		JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                logoPanel, internalSplit);
-		
-		mainSplit.setDividerLocation(HEIGHT/5);
-		
-		internalSplit.setDividerLocation(HEIGHT/2 + 40);
-		mainSplit.setDividerSize(1);
-		internalSplit.setDividerSize(1);
-		
-		this.add(mainSplit);
+
+		this.dim = controller.getDimension();
+
+		this.setLocation(WIDTH-this.getSize().width/2, HEIGHT/2-this.getSize().height/2);
 		this.setSize(WIDTH, HEIGHT);
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-		
+
+		this.matrixPanel = new MatrixPanel(dim, controller);
+		matrixPanel.setPreferredSize(new Dimension(WIDTH/2, WIDTH/2));
+
+		this.buttonsPanel = new JPanel();
+		buttonsPanel.setOpaque(false);
+        buttonsPanel.add(new Button());
+
+		this.mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, matrixPanel, buttonsPanel);
+		this.mainPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+		this.mainPanel.setDividerLocation(WIDTH/2 + 50);
+		this.mainPanel.setDividerSize(0);
+		this.mainPanel.setBackground(Color.CYAN);
+
+		this.add(mainPanel);
+
 		this.setVisible(true);
 		this.setResizable(false);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
-	
-	public void manageLabel(int i, int j, Label l) {
-		int thickBorder = 5;
-		
-		l.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		
-		boolean differentBottom = false, differentRight = false;
-		
-		if(i != dim - 1) 
-    		if(controller.differentSectorOfBottomCell(i, j)) {
-    			l.setBorder(BorderFactory.createMatteBorder(1, 1, thickBorder, 1, Color.BLACK));
-    			differentBottom = true;
-    		}
-    	
-		if(j != dim - 1)
-			if(controller.differentSectorOfRightCell(i, j)) {
-				l.setBorder(BorderFactory.createMatteBorder(1, 1, 1, thickBorder, Color.BLACK));
-				differentRight = true;
-			}
-    	
-    	if(differentBottom && differentRight)
-    		l.setBorder(BorderFactory.createMatteBorder(1, 1, thickBorder, thickBorder, Color.BLACK));
-
-        matrixPanel.add(l);
-	}
-
 }

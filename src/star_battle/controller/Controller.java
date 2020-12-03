@@ -28,5 +28,9 @@ public class Controller {
 	public boolean differentSectorOfRightCell(int i, int j) {
 		return sectors[i][j] != sectors[i][j+1];
 	}
-	
+
+    public int getDimension() {
+		// TODO aggiustare questa funzione in modo che torni la dimensione della matrice
+		return n;
+    }
 }
