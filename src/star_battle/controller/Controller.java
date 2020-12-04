@@ -51,7 +51,7 @@ public class Controller {
 		}
 		
 		userMatrix = new UserMatrix(matrix.getDimension(), matrix.getStarsNumber());
-		solutionMatrix = new SolutionMatrix("");
+//		solutionMatrix = new SolutionMatrix();
 		
 	}
 
