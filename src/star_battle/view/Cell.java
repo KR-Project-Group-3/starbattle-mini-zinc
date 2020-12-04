@@ -54,14 +54,14 @@ public class Cell extends JLabel implements MouseListener {
         filled = !filled;
         if(filled) {
             setText("\u2605");
-            setForeground(Color.black);
+            //setForeground(Color.black);
             matrixPanel.setStar(logicCell.getI(), logicCell.getJ(), true);
 
         }
         else {
             setText("");
             matrixPanel.setStar(logicCell.getI(), logicCell.getJ(), false);
-            setForeground(Color.black);
+            //setForeground(Color.black);
         }
     }
 

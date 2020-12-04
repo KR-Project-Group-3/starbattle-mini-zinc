@@ -6,6 +6,7 @@ import star_battle.model.LogicCell;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MatrixPanel extends JPanel {
 
@@ -73,20 +74,21 @@ public class MatrixPanel extends JPanel {
         add(l, gbc);
     }
     
-    public void colorCells(ArrayList<LogicCell> violatedCell) {
+    public void colorCells(HashSet<LogicCell> violatedCell) {
 
         for(Cell c: cells){
             if(violatedCell.contains(c.getLogicCellModified())){
-                c.color(Color.red);
+                c.color(Color.RED);
             }
             else{
-                c.color(Color.black);
+                c.color(Color.BLACK);
             }
         }
+    	
     }
 
     public void setStar(int i, int j, boolean setOrDelete){
-        controller.setStar(i,j, setOrDelete);
+        controller.setStar(i, j, setOrDelete);
         colorCells(controller.checkConstraints());
     }
 
