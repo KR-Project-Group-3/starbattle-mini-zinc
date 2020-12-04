@@ -2,14 +2,20 @@ package star_battle.view;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+
+import star_battle.controller.Controller;
+import star_battle.model.LogicCell;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class Cell extends JLabel implements MouseListener{
+public class Cell extends JLabel implements MouseListener {
 
     private boolean filled = false;
     private int size;
+    
+    
     public Cell(int size){
 
         this.size = size;
@@ -32,6 +38,10 @@ public class Cell extends JLabel implements MouseListener{
     public void setFilled(boolean filled) {
         this.filled = filled;
     }
+    
+    public void color(Color color) {
+    	setForeground(color);
+    }
 
 
     @Override
@@ -39,12 +49,16 @@ public class Cell extends JLabel implements MouseListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
+    	MatrixPanel matrixPanel = (MatrixPanel) this.getParent();
         filled = !filled;
         if(filled) {
             setText("\u2605");
+            matrixPanel.colorCells(matrixPanel.getController().checkConstraints());
         }
-        else
+        else {
             setText("");
+            matrixPanel.colorCells(matrixPanel.getController().checkConstraints());
+        }
     }
 
     @Override

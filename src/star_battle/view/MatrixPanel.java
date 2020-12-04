@@ -1,13 +1,17 @@
 package star_battle.view;
 
 import star_battle.controller.Controller;
+import star_battle.model.LogicCell;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MatrixPanel extends JPanel {
 
     private int rows;
+    private ArrayList<Cell> cells;
+    
     private Controller controller = null;
 
     public MatrixPanel(Controller controller) {
@@ -15,6 +19,7 @@ public class MatrixPanel extends JPanel {
         super();
         this.controller = controller;
         this.rows = controller.getDimension();
+        cells = new ArrayList<Cell>();
         setLayout(new GridBagLayout());
         setOpaque(false);
         generateMatrix(rows);
@@ -37,10 +42,10 @@ public class MatrixPanel extends JPanel {
                 gbc.gridx = j;
                 gbc.gridy = i;
                 Cell l = new Cell(cellsize);
+                cells.add(l);
                 this.manageLabel(i, j, l, gbc);
             }
         }
-
     }
 
     public void manageLabel(int i, int j, Cell l, GridBagConstraints gbc) {
@@ -67,6 +72,10 @@ public class MatrixPanel extends JPanel {
 
         add(l, gbc);
     }
+    
+    public void colorCells(ArrayList<LogicCell> violatedCell) {
+    	
+    }
 
     public int getRows() {
         return rows;
@@ -74,5 +83,9 @@ public class MatrixPanel extends JPanel {
 
     public void setRows(int rows) {
         this.rows = rows;
+    }
+    
+    public Controller getController() {
+    	return controller;
     }
 }
