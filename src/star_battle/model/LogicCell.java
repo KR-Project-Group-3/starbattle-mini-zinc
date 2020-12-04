@@ -1,5 +1,7 @@
 package star_battle.model;
 
+import java.util.Objects;
+
 public class LogicCell {
 
 	private int i;
@@ -25,5 +27,17 @@ public class LogicCell {
 	public void setJ(int j) {
 		this.j = j;
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		LogicCell logicCell = (LogicCell) o;
+		return i == logicCell.i && j == logicCell.j;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(i, j);
+	}
 }

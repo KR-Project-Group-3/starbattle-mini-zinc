@@ -41,7 +41,7 @@ public class MatrixPanel extends JPanel {
             for (int j = 0; j < rows; j++) {
                 gbc.gridx = j;
                 gbc.gridy = i;
-                Cell l = new Cell(cellsize);
+                Cell l = new Cell(cellsize, i, j);
                 cells.add(l);
                 this.manageLabel(i, j, l, gbc);
             }
@@ -74,7 +74,20 @@ public class MatrixPanel extends JPanel {
     }
     
     public void colorCells(ArrayList<LogicCell> violatedCell) {
-    	
+
+        for(Cell c: cells){
+            if(violatedCell.contains(c.getLogicCellModified())){
+                c.color(Color.red);
+            }
+            else{
+                c.color(Color.black);
+            }
+        }
+    }
+
+    public void setStar(int i, int j, boolean setOrDelete){
+        controller.setStar(i,j, setOrDelete);
+        colorCells(controller.checkConstraints());
     }
 
     public int getRows() {

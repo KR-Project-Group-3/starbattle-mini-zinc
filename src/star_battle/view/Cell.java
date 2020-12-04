@@ -14,11 +14,12 @@ public class Cell extends JLabel implements MouseListener {
 
     private boolean filled = false;
     private int size;
+    private LogicCell logicCell = null;
     
-    
-    public Cell(int size){
+    public Cell(int size, int i, int j){
 
         this.size = size;
+        this.logicCell = new LogicCell(i, j);
         setBackground(Color.WHITE);
         setOpaque(true);
         setHorizontalAlignment(CENTER);
@@ -53,11 +54,14 @@ public class Cell extends JLabel implements MouseListener {
         filled = !filled;
         if(filled) {
             setText("\u2605");
-            matrixPanel.colorCells(matrixPanel.getController().checkConstraints());
+            setForeground(Color.black);
+            matrixPanel.setStar(logicCell.getI(), logicCell.getJ(), true);
+
         }
         else {
             setText("");
-            matrixPanel.colorCells(matrixPanel.getController().checkConstraints());
+            matrixPanel.setStar(logicCell.getI(), logicCell.getJ(), false);
+            setForeground(Color.black);
         }
     }
 
@@ -69,5 +73,18 @@ public class Cell extends JLabel implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {}
+
+    public LogicCell getLogicCell() {
+        return logicCell;
+    }
+
+    public void setLogicCell(LogicCell logicCell) {
+        this.logicCell = logicCell;
+    }
+
+    public LogicCell getLogicCellModified(){
+        return new LogicCell(logicCell.getI()+1, logicCell.getJ()+1);
+    }
+
 
 }
