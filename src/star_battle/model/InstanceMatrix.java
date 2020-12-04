@@ -5,7 +5,6 @@ import star_battle.exceptions.InvalidSectorValueException;
 import star_battle.exceptions.InvalidStarsNumberException;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -21,7 +20,7 @@ public class InstanceMatrix {
     }
 
 
-    public void parseMatrix() throws IOException {
+    public void parseMatrix() throws IOException, InvalidInstanceDimensionException, InvalidSectorValueException, InvalidStarsNumberException {
 
         // Create the FileReader
         FileReader fileReader = new FileReader(instanceFilePath);
@@ -117,11 +116,7 @@ public class InstanceMatrix {
         this.starsNumber = starsNumber;
     }
 
-    public int[][] getSectorsMatrix() {
-        return sectorsMatrix;
-    }
-
-    public void setSectorsMatrix(int[][] sectorsMatrix) {
-        this.sectorsMatrix = sectorsMatrix;
+    public int getSectorsMatrix(int row, int column) {
+        return sectorsMatrix[row][column];
     }
 }

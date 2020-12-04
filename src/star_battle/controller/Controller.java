@@ -1,23 +1,32 @@
 package star_battle.controller;
 
+import star_battle.exceptions.InvalidInstanceDimensionException;
+import star_battle.exceptions.InvalidSectorValueException;
+import star_battle.exceptions.InvalidStarsNumberException;
 import star_battle.model.InstanceMatrix;
 
 import java.io.IOException;
 
 public class Controller {
 
-	private InstanceMatrix matrix = null;
+	private InstanceMatrix matrix;
 	
 	
 	public Controller() { }
 	
-	public void instanceMatrix(int level){
-		level -= 1;
-		matrix = new InstanceMatrix("data/data"+level+".dzn");
+	public void loadNewInstance(int level){
+
+		matrix = new InstanceMatrix("data/data" + level + ".dzn");
 		try {
 			matrix.parseMatrix();
 		} catch (IOException e) {
-			e.printStackTrace();
+			// TODO: Call a UI Method to show the error
+		} catch (InvalidStarsNumberException e){
+			// TODO: Call a UI Method to show the error
+		} catch (InvalidSectorValueException e){
+			// TODO: Call a UI Method to show the error
+		} catch (InvalidInstanceDimensionException e){
+			// TODO: Call a UI Method to show the error
 		}
 	}
 
@@ -26,7 +35,7 @@ public class Controller {
 		if (matrix==null){
 			throw new RuntimeException("Matrix not instanced!");
 		}
-		return matrix.getSectorsMatrix()[i][j] != matrix.getSectorsMatrix()[i+1][j];
+		return matrix.getSectorsMatrix(i, j) != matrix.getSectorsMatrix(i+1, j);
 	}
 
 
@@ -34,7 +43,7 @@ public class Controller {
 		if (matrix==null){
 			throw new RuntimeException("Matrix not instanced!");
 		}
-		return matrix.getSectorsMatrix()[i][j] != matrix.getSectorsMatrix()[i][j+1];
+		return matrix.getSectorsMatrix(i, j) != matrix.getSectorsMatrix(i, j+1);
 	}
 
     public int getDimension() {
