@@ -22,11 +22,11 @@ constraint 0 = sum(j in ind_border)(matrix[dim+1,j]);
 constraint 0 = sum(i in ind_border)(matrix[i,0]);
 constraint 0 = sum(i in ind_border)(matrix[i,dim+1]);
 
-%1 number for rows and columns
+%num_stars stars for rows and columns
 constraint forall(i in ind)( num_stars = sum(j in ind)(matrix[i,j]) /\ num_stars = sum(j in ind)(matrix[j,i]));
 
 %check adjacent cells
-constraint forall(i in ind, j in ind where matrix[i,j] = 1)(matrix[i,j-1] + matrix[i-1,j-1] + matrix[i-1,j] + matrix[i-1,j+1] + matrix[i,j+1] + matrix[i+1,j+1] + matrix[i+1,j] + matrix[i-1,j+1] = 0);
+constraint forall(i in ind, j in ind where matrix[i,j] = 1)(matrix[i,j-1] + matrix[i-1,j-1] + matrix[i-1,j] + matrix[i-1,j+1] + matrix[i,j+1] + matrix[i+1,j+1] + matrix[i+1,j] + matrix[i+1,j-1] = 0);
 
 %constraints for sectors
 constraint forall(i in ind)(sum(i2, j in ind where sectors[i2,j] == i)(matrix[i2,j]) = num_stars);

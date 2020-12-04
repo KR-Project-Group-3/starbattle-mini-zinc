@@ -116,7 +116,7 @@ public class InstanceMatrix {
         this.starsNumber = starsNumber;
     }
 
-    public int getSectorsMatrix(int row, int column) {
+    public int getSector(int row, int column) {
         return sectorsMatrix[row][column];
     }
 }
