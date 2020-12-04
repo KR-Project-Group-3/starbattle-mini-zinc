@@ -5,11 +5,13 @@ import star_battle.controller.Controller;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class GamePanel extends JPanel{
+public class GamePanel extends JPanel implements KeyListener {
 
     private JSplitPane mainPanel = null;
 
@@ -29,6 +31,8 @@ public class GamePanel extends JPanel{
         w = width;
         h = height;
         this.setPreferredSize(new Dimension(width, height));
+
+        this.addKeyListener(this);
 
         this.matrixPanel = new MatrixPanel(dim, controller);
         matrixPanel.setPreferredSize(new Dimension(width/2, width/2));
@@ -53,5 +57,23 @@ public class GamePanel extends JPanel{
         super.paintComponent(g);
         g.drawImage(bgImage, 0, 0, w, h,null);
 
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            Frame f = (Frame) this.getTopLevelAncestor();
+            f.createMenu();
+        }
     }
 }
