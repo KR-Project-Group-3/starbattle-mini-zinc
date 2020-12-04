@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Button extends JButton implements ActionListener {
+public class MinizincButton extends JButton implements ActionListener {
 
-    public Button() {
+    public MinizincButton() {
         super();
         setText("Done!");
         this.addActionListener(this);

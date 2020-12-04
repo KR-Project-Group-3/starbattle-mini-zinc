@@ -22,13 +22,13 @@ public class MatrixPanel extends JPanel {
 
     public void generateMatrix(int rows) {
 
-        int cellzize = 50;
+        int cellsize = 50;
         if (controller.getDimension() > 8)
-            cellzize = 45;
+        	cellsize = 45;
         if (controller.getDimension() > 10)
-            cellzize = 35;
+        	cellsize = 35;
         if (controller.getDimension() > 15)
-            cellzize = 29;
+        	cellsize = 29;
 
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -36,7 +36,7 @@ public class MatrixPanel extends JPanel {
             for (int j = 0; j < rows; j++) {
                 gbc.gridx = j;
                 gbc.gridy = i;
-                Cell l = new Cell(cellzize);
+                Cell l = new Cell(cellsize);
                 this.manageLabel(i, j, l, gbc);
             }
         }

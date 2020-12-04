@@ -8,7 +8,6 @@ public class Controller {
 
 	private InstanceMatrix matrix = null;
 	
-	
 	public Controller() { }
 	
 	public void instanceMatrix(int level){
@@ -42,5 +41,12 @@ public class Controller {
 			throw new RuntimeException("Matrix not instanced!");
 		}
 		return matrix.getDimension();
+    }
+    
+    public int getStarsNumber() {
+    	if (matrix==null){
+			throw new RuntimeException("Matrix not instanced!");
+		}
+		return matrix.getStarsNumber();
     }
 }

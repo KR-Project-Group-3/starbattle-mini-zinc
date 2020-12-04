@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +40,31 @@ public class GamePanel extends JPanel implements KeyListener {
 
         this.buttonsPanel = new JPanel();
         buttonsPanel.setOpaque(false);
-        buttonsPanel.add(new Button());
+       
+        JLabel stars = new JLabel("\u2605 " + controller.getStarsNumber());
+        stars.setFont(new Font("Serif", Font.BOLD, 20));
+        buttonsPanel.add(stars);
+        buttonsPanel.add(new JButton("Go back")).addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				goBack();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {}
+		});
+        
+        buttonsPanel.add(new MinizincButton());
 
         this.mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, matrixPanel, buttonsPanel);
         this.mainPanel.setOpaque(false);
@@ -71,8 +97,12 @@ public class GamePanel extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            Frame f = (Frame) this.getTopLevelAncestor();
-            f.createMenu();
+            goBack();
         }
+    }
+    
+    public void goBack() {
+    	Frame f = (Frame) this.getTopLevelAncestor();
+        f.createMenu();
     }
 }
