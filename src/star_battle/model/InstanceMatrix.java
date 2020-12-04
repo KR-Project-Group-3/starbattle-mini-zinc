@@ -112,4 +112,16 @@ public class InstanceMatrix {
     public void setInstanceFilePath(String instanceFilePath) {
         this.instanceFilePath = instanceFilePath;
     }
+
+    public void setStarsNumber(int starsNumber) {
+        this.starsNumber = starsNumber;
+    }
+
+    public int[][] getSectorsMatrix() {
+        return sectorsMatrix;
+    }
+
+    public void setSectorsMatrix(int[][] sectorsMatrix) {
+        this.sectorsMatrix = sectorsMatrix;
+    }
 }

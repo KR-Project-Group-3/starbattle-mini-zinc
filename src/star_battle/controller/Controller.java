@@ -1,36 +1,46 @@
 package star_battle.controller;
 
+import star_battle.model.InstanceMatrix;
+
+import java.io.IOException;
+
 public class Controller {
 
-	//private Model model;
-	
-	private int n = 5;
-	private int[][] sectors =  {
-			{1, 2, 2, 2, 3},
-			{1, 2, 2, 2, 3},
-			{1, 1, 4, 5, 5},
-			{1, 1, 4, 4, 4},
-			{1, 4, 4, 4, 4}
-	};
+	private InstanceMatrix matrix = null;
 	
 	
-	public Controller() {
-		
-		//model = new Model();
+	public Controller() { }
+	
+	public void instanceMatrix(int level){
+		level -= 1;
+		matrix = new InstanceMatrix("data/data"+level+".dzn");
+		try {
+			matrix.parseMatrix();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	
+
+
 	public boolean differentSectorOfBottomCell(int i, int j) {
-		return sectors[i][j] != sectors[i+1][j];
+		if (matrix==null){
+			throw new RuntimeException("Matrix not instanced!");
+		}
+		return matrix.getSectorsMatrix()[i][j] != matrix.getSectorsMatrix()[i+1][j];
 	}
 
 
 	public boolean differentSectorOfRightCell(int i, int j) {
-		return sectors[i][j] != sectors[i][j+1];
+		if (matrix==null){
+			throw new RuntimeException("Matrix not instanced!");
+		}
+		return matrix.getSectorsMatrix()[i][j] != matrix.getSectorsMatrix()[i][j+1];
 	}
 
     public int getDimension() {
-		// TODO aggiustare questa funzione in modo che torni la dimensione della matrice
-		return n;
+		if (matrix==null){
+			throw new RuntimeException("Matrix not instanced!");
+		}
+		return matrix.getDimension();
     }
 }

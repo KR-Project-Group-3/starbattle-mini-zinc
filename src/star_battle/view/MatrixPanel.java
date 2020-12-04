@@ -10,11 +10,11 @@ public class MatrixPanel extends JPanel {
     private int rows;
     private Controller controller = null;
 
-    public MatrixPanel(int rows, Controller controller) {
+    public MatrixPanel(Controller controller) {
 
         super();
-        this.rows = rows;
         this.controller = controller;
+        this.rows = controller.getDimension();
         setLayout(new GridBagLayout());
         setOpaque(false);
         generateMatrix(rows);
@@ -22,12 +22,21 @@ public class MatrixPanel extends JPanel {
 
     public void generateMatrix(int rows) {
 
+        int cellzize = 50;
+        if (controller.getDimension() > 8)
+            cellzize = 30;
+        if (controller.getDimension() > 10)
+            cellzize = 25;
+        if (controller.getDimension() > 15)
+            cellzize = 23;
+
+
         GridBagConstraints gbc = new GridBagConstraints();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < rows; j++) {
                 gbc.gridx = j;
                 gbc.gridy = i;
-                Cell l = new Cell();
+                Cell l = new Cell(cellzize);
                 this.manageLabel(i, j, l, gbc);
             }
         }

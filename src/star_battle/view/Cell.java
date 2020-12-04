@@ -9,18 +9,20 @@ import java.awt.event.MouseListener;
 public class Cell extends JLabel implements MouseListener{
 
     private boolean filled = false;
-    public Cell(){
+    private int size;
+    public Cell(int size){
+
+        this.size = size;
         setBackground(Color.WHITE);
         setOpaque(true);
-
         setHorizontalAlignment(CENTER);
-        setFont(new Font("Serif", Font.BOLD, 30));
+        setFont(new Font("Serif", Font.BOLD, size/2));
         this.addMouseListener(this);
     }
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(50,50);
+        return new Dimension(size,size);
     }
 
     public boolean isFilled() {

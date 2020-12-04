@@ -17,7 +17,6 @@ public class GamePanel extends JPanel implements KeyListener {
 
     private JPanel matrixPanel;
     private JPanel buttonsPanel;
-    private int dim = 5;
     private Image bgImage = null;
     private int w, h;
 
@@ -34,7 +33,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
         this.addKeyListener(this);
 
-        this.matrixPanel = new MatrixPanel(dim, controller);
+        this.matrixPanel = new MatrixPanel(controller);
         matrixPanel.setPreferredSize(new Dimension(width/2, width/2));
 
         this.buttonsPanel = new JPanel();
@@ -43,7 +42,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
         this.mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, matrixPanel, buttonsPanel);
         this.mainPanel.setOpaque(false);
-        this.mainPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        this.mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         this.mainPanel.setDividerLocation(width/2 + 50);
         this.mainPanel.setDividerSize(0);
 

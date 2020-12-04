@@ -18,7 +18,6 @@ public class Frame extends JFrame {
 	public Frame(Controller controller) {
 
 		this.controller = controller;
-		this.dim = controller.getDimension();
 
 		this.setSize(WIDTH, HEIGHT);
 		this.setLayout(new BorderLayout());
@@ -34,6 +33,7 @@ public class Frame extends JFrame {
 		if(mainPanel != null) {
 			this.remove(mainPanel);
 		}
+		controller.instanceMatrix(level);
 		mainPanel = new GamePanel(this.controller, WIDTH, HEIGHT);
 		this.add(mainPanel, BorderLayout.CENTER);
 		mainPanel.requestFocus();
