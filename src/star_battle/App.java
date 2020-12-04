@@ -12,7 +12,7 @@ public class App {
 	public static void main(String[] args) {
 		
 		Controller controller = new Controller();
+		controller.loadNewInstance(0);
 		Frame frame = new Frame(controller);
-		
 	}
 }

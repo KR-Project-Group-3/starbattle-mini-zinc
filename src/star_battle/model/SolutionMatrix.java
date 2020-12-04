@@ -1,8 +1,5 @@
 package star_battle.model;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-
 public class SolutionMatrix {
 
     private String solutionFilePath;
