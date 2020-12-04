@@ -24,11 +24,11 @@ public class MatrixPanel extends JPanel {
 
         int cellzize = 50;
         if (controller.getDimension() > 8)
-            cellzize = 30;
+            cellzize = 45;
         if (controller.getDimension() > 10)
-            cellzize = 25;
+            cellzize = 35;
         if (controller.getDimension() > 15)
-            cellzize = 23;
+            cellzize = 29;
 
 
         GridBagConstraints gbc = new GridBagConstraints();

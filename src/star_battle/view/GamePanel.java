@@ -29,12 +29,12 @@ public class GamePanel extends JPanel implements KeyListener {
         }
         w = width;
         h = height;
-        this.setPreferredSize(new Dimension(width, height));
+        //this.setPreferredSize(new Dimension(width, height));
 
         this.addKeyListener(this);
 
         this.matrixPanel = new MatrixPanel(controller);
-        matrixPanel.setPreferredSize(new Dimension(width/2, width/2));
+        matrixPanel.setPreferredSize(new Dimension(width, width));
 
         this.buttonsPanel = new JPanel();
         buttonsPanel.setOpaque(false);
@@ -42,8 +42,8 @@ public class GamePanel extends JPanel implements KeyListener {
 
         this.mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, matrixPanel, buttonsPanel);
         this.mainPanel.setOpaque(false);
-        this.mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        this.mainPanel.setDividerLocation(width/2 + 50);
+        this.mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        this.mainPanel.setDividerLocation(width/2 + 100);
         this.mainPanel.setDividerSize(0);
 
         this.add(mainPanel);
