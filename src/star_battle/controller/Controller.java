@@ -15,7 +15,7 @@ public class Controller {
 	
 	public void loadNewInstance(int level){
 
-		matrix = new InstanceMatrix("data/data" + level + ".dzn");
+		matrix = new InstanceMatrix("data/data" + (level - 1) + ".dzn");
 		try {
 			matrix.parseMatrix();
 		} catch (IOException e) {

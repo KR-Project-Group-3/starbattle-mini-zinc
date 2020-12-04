@@ -33,7 +33,7 @@ public class Frame extends JFrame {
 		if(mainPanel != null) {
 			this.remove(mainPanel);
 		}
-		controller.instanceMatrix(level);
+		controller.loadNewInstance(level);
 		mainPanel = new GamePanel(this.controller, WIDTH, HEIGHT);
 		this.add(mainPanel, BorderLayout.CENTER);
 		mainPanel.requestFocus();
