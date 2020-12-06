@@ -13,6 +13,8 @@ public class MatrixPanel extends JPanel {
     private int rows;
     private ArrayList<Cell> cells;
     
+    private boolean inGame;
+    
     private Controller controller = null;
 
     public MatrixPanel(Controller controller) {
@@ -20,6 +22,7 @@ public class MatrixPanel extends JPanel {
         super();
         this.controller = controller;
         this.rows = controller.getDimension();
+        inGame = true;
         cells = new ArrayList<Cell>();
         setLayout(new GridBagLayout());
         setOpaque(false);
@@ -102,5 +105,13 @@ public class MatrixPanel extends JPanel {
     
     public Controller getController() {
     	return controller;
+    }
+    
+    public boolean isInGame() {
+    	return this.inGame;
+    }
+    
+    public void noMoreInGame() {
+    	this.inGame = false;
     }
 }

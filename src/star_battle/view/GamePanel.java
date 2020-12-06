@@ -1,17 +1,25 @@
 package star_battle.view;
 
-import star_battle.controller.Controller;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+
+import star_battle.controller.Controller;
 
 public class GamePanel extends JPanel implements KeyListener {
 
@@ -44,6 +52,10 @@ public class GamePanel extends JPanel implements KeyListener {
         JLabel stars = new JLabel("\u2605 " + controller.getStarsNumber());
         stars.setFont(new Font("Serif", Font.BOLD, 20));
         buttonsPanel.add(stars);
+
+		JLabel result = new JLabel();
+        result.setFont(new Font("Serif", Font.BOLD, 20));
+        
         buttonsPanel.add(new JButton("Go back")).addMouseListener(new MouseListener() {
 			
 			@Override
@@ -64,7 +76,37 @@ public class GamePanel extends JPanel implements KeyListener {
 			public void mouseClicked(MouseEvent arg0) {}
 		});
         
-        buttonsPanel.add(new MinizincButton());
+        buttonsPanel.add(new JButton("Done!")).addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+
+				if(controller.hasUserWon()) {
+					result.setText("Good job!");
+					result.setForeground(Color.GREEN);
+					((MatrixPanel) matrixPanel).noMoreInGame();
+				}
+				
+				else {
+					result.setText("Keep trying!");
+					result.setForeground(Color.RED);
+				}
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {}
+		});;
+		
+        buttonsPanel.add(result);
 
         this.mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, matrixPanel, buttonsPanel);
         this.mainPanel.setOpaque(false);

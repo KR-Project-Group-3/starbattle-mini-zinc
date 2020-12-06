@@ -16,5 +16,7 @@ public class MinizincButton extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         //TODO invocare minizinc
+    	
+    	System.out.println("ciao");
     }
 }

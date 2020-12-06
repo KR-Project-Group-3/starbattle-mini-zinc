@@ -51,18 +51,18 @@ public class Cell extends JLabel implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
     	MatrixPanel matrixPanel = (MatrixPanel) this.getParent();
-        filled = !filled;
-        if(filled) {
-            setText("\u2605");
-            //setForeground(Color.black);
-            matrixPanel.setStar(logicCell.getI(), logicCell.getJ(), true);
-
-        }
-        else {
-            setText("");
-            matrixPanel.setStar(logicCell.getI(), logicCell.getJ(), false);
-            //setForeground(Color.black);
-        }
+    	if(matrixPanel.isInGame()) {
+	        filled = !filled;
+	        if(filled) {
+	            setText("\u2605");
+	            matrixPanel.setStar(logicCell.getI(), logicCell.getJ(), true);
+	
+	        }
+	        else {
+	            setText("");
+	            matrixPanel.setStar(logicCell.getI(), logicCell.getJ(), false);
+	        }
+    	}
     }
 
     @Override

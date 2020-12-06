@@ -51,7 +51,7 @@ public class Controller {
 		}
 		
 		userMatrix = new UserMatrix(matrix.getDimension(), matrix.getStarsNumber());
-//		solutionMatrix = new SolutionMatrix();
+		solutionMatrix = new SolutionMatrix(matrix);
 		
 	}
 
@@ -222,5 +222,22 @@ public class Controller {
 //		}
 		
 		return (HashSet<LogicCell>) violatedCells;
+	}
+	
+	public boolean hasUserWon() {
+		
+		try {
+			solutionMatrix.parseMatrix();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		for(int i = 1; i < matrix.getDimension(); i++) {
+			for(int j = 1; j < matrix.getDimension(); j++) {
+				if(userMatrix.get(i, j) != solutionMatrix.get(i - 1, j - 1))
+					return false;
+			}
+		}
+		return true;
 	}
 }
