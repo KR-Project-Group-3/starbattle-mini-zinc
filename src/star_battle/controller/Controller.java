@@ -148,6 +148,7 @@ public class Controller {
 					sectorCells.add(t);
 				}
 			}
+
 			if(rowCells.size() > numStars)
 				violatedCells.addAll(rowCells);
 			
@@ -160,81 +161,24 @@ public class Controller {
 			rowCells.clear();
 			columnCells.clear();
 			sectorCells.clear();
-		}		
-		
-		//same line and same column and adjacent
-//		for(int i = 1; i < userMatrix.getDimension()-1; i++){
-//			ArrayList<LogicCell> cellsInaRow = new ArrayList<>();
-//			ArrayList<LogicCell> cellsInaColumn = new ArrayList<>();
-//			for(int j = 1; j < userMatrix.getDimension()-1; j++){
-//
-//				if(userMatrix.get(i,j)){
-//
-//					cellsInaRow.add(new LogicCell(i,j));
-//					boolean added = false;
-//
-//					if(userMatrix.get(i,j-1)){
-//						cells.add(new LogicCell(i,j-1));
-//						added = true;
-//					}
-//					if(userMatrix.get(i-1,j-1)){
-//						cells.add(new LogicCell(i-1,j-1));
-//						added = true;
-//					}
-//					if(userMatrix.get(i-1,j)) {
-//						added = true;
-//						cells.add(new LogicCell(i - 1, j));
-//					}
-//					if(userMatrix.get(i-1,j+1)){
-//						added = true;
-//						cells.add(new LogicCell(i - 1, j+1));
-//					}
-//					if(userMatrix.get(i,j+1)){
-//						added = true;
-//						cells.add(new LogicCell(i, j+1));
-//					}
-//					if(userMatrix.get(i+1,j+1)) {
-//						added = true;
-//						cells.add(new LogicCell(i + 1, j + 1));
-//					}
-//					if(userMatrix.get(i+1,j)){
-//						added = true;
-//						cells.add(new LogicCell(i + 1, j));
-//					}
-//					if(userMatrix.get(i-1,j+1)){
-//						added = true;
-//						cells.add(new LogicCell(i - 1, j+1));
-//					}
-//					if(added){
-//						cells.add(new LogicCell(i,j));
-//					}
-//				}
-//				if(userMatrix.get(j,i)){
-//					cellsInaColumn.add(new LogicCell(j,i));
-//				}
-//			}
-//			if (cellsInaRow.size() > numberOfStars){
-//				cells.addAll(cellsInaRow);
-//			}
-//			if (cellsInaColumn.size() > numberOfStars){
-//				cells.addAll(cellsInaColumn);
-//			}
-//		}
+		}
 		
 		return (HashSet<LogicCell>) violatedCells;
 	}
 	
 	public boolean hasUserWon() {
-		
-		try {
-			solutionMatrix.parseMatrix();
-		} catch (IOException e) {
-			e.printStackTrace();
+
+		if(!this.solutionMatrix.isMatrixInstantiated()) {
+			try {
+				solutionMatrix.parseMatrix();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
-		for(int i = 1; i < matrix.getDimension(); i++) {
-			for(int j = 1; j < matrix.getDimension(); j++) {
-				if(userMatrix.get(i, j) != solutionMatrix.get(i - 1, j - 1))
+
+		for(int i = 0; i < matrix.getDimension(); i++) {
+			for(int j = 0; j < matrix.getDimension(); j++) {
+				if(userMatrix.get(i + 1, j + 1) != solutionMatrix.get(i, j))
 					return false;
 			}
 		}

@@ -27,7 +27,7 @@ public class SolutionMatrix {
         Charset charset = StandardCharsets.US_ASCII;
         BufferedWriter writer = Files.newBufferedWriter(Path.of(this.generatedInstanceFilePath), charset);
         String textToWrite = "num_stars = " + this.instanceMatrix.getStarsNumber() + ";\n";
-        textToWrite += "dim = 5;\n" + "sectors = [|\n";
+        textToWrite += "dim = " + this.instanceMatrix.getDimension() + ";\n" + "sectors = [|\n";
 
         for (int i = 0; i < instanceMatrix.getDimension(); ++i){
             for (int j = 0; j < instanceMatrix.getDimension(); j++) {
@@ -91,8 +91,8 @@ public class SolutionMatrix {
         }
     }
 
-    public boolean isThereAStar(int row, int column){
-        return this.solutionMatrix[row][column];
+    public boolean isMatrixInstantiated(){
+        return this.solutionMatrix != null;
     }
     
     public boolean get(int i, int j) {
