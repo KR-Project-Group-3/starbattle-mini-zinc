@@ -58,12 +58,13 @@ public class SolutionMatrix {
 
         if(isWindows) {
             this.process = Runtime.getRuntime()
-                    .exec("cmd /c \"C:\\Program Files\\MiniZinc\\minizinc\" " + this.generatedInstanceFilePath +
-                                    " models" + File.separator + "star_puzzle.mzn"
+                    .exec("minizinc models" + File.separator + "star_puzzle.mzn " +
+                                    this.generatedInstanceFilePath
                             , null, new File(instanceFile.getAbsoluteFile().getParent()));
         } else {
             this.process = Runtime.getRuntime()
-                    .exec("minizinc models/star_puzzle.mzn " + this.generatedInstanceFilePath + " --solver Gecode", null, new File(instanceFile.getAbsoluteFile().getParent()));
+                    .exec("minizinc models " + File.separator + "star_puzzle.mzn " +
+                            this.generatedInstanceFilePath + " --solver Gecode", null, new File(instanceFile.getAbsoluteFile().getParent()));
         	
         }
 
