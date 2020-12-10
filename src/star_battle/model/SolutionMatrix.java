@@ -63,7 +63,7 @@ public class SolutionMatrix {
                             , null, new File(instanceFile.getAbsoluteFile().getParent()));
         } else {
             this.process = Runtime.getRuntime()
-                    .exec("minizinc models " + File.separator + "star_puzzle.mzn " +
+                    .exec("minizinc models" + File.separator + "star_puzzle.mzn " +
                             this.generatedInstanceFilePath + " --solver Gecode", null, new File(instanceFile.getAbsoluteFile().getParent()));
         	
         }
