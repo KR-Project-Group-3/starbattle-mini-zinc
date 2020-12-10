@@ -12,13 +12,17 @@ public class MenuButtonsPanel extends JPanel {
     public MenuButtonsPanel(int rows, int columns, Controller controller) {
             super();
             this.controller = controller;
-            setLayout(new GridBagLayout());
+        	this.setLayout(new GridBagLayout());
             setOpaque(false);
             generateButtons(rows, columns);
     }
 
     public void generateButtons(int rows, int columns) {
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.ipady = 10;      //make this component tall
+        gbc.ipadx = 10;     
+//        gbc.weightx = 0.5;   //increase horizontal space
+//        gbc.weighty = 0.1;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 gbc.gridx = j;
