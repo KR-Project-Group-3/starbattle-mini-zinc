@@ -16,8 +16,7 @@ public class Frame extends JFrame {
 	
 	public static Image bgImage;
     public static Image logo;
-	
-	private int dim = 5;
+
 
 	private JPanel mainPanel = null;
 	private Controller controller = null;

@@ -31,7 +31,7 @@ public class InstanceMatrix {
         URLConnection connection = null;
         String pattern = "var task = '(.*?)'";
         try {
-            connection =  new URL("https://puzzle-star-battle.com/?size="+level).openConnection();
+            connection =  new URL("https://it.puzzle-star-battle.com/?size="+level).openConnection();
             Scanner scanner = new Scanner(connection.getInputStream());
             scanner.useDelimiter("\\Z");
             content = scanner.next();
@@ -51,17 +51,29 @@ public class InstanceMatrix {
             throw new RuntimeException("Cannot read the instance! Please retry!");
         }
 
+
         this.dimension = (int)Math.sqrt(tasks.length);
 
-        r = Pattern.compile("<div class=\"puzzleInfo\"><p>.*/(\\d+?)");
-        m = r.matcher(content);
+        if(level < 9){
+            r = Pattern.compile("<div class=\"puzzleInfo\"><p>.*/(\\d+?)");
+            m = r.matcher(content);
 
-        if (m.find( )) {
-            this.starsNumber = Integer.parseInt(m.group(1));
-        }else {
-            throw new RuntimeException("Cannot read the instance! Please retry!");
+            if (m.find( )) {
+                this.starsNumber = Integer.parseInt(m.group(1));
+            }else {
+                throw new RuntimeException("Cannot read the instance! Please retry!");
+            }
         }
+        else{
+            r = Pattern.compile("<div class=\"puzzleInfo\"><p>(\\d+?)");
+            m = r.matcher(content);
 
+            if (m.find( )) {
+                this.starsNumber = Integer.parseInt(m.group(1));
+            }else {
+                throw new RuntimeException("Cannot read the instance! Please retry!");
+            }
+        }
         writeFile(tasks);
     }
 
@@ -103,14 +115,6 @@ public class InstanceMatrix {
 
     public int getStarsNumber() {
         return starsNumber;
-    }
-
-    public String getInstanceFilePath() {
-        return instanceFilePath;
-    }
-
-    public void setInstanceFilePath(String instanceFilePath) {
-        this.instanceFilePath = instanceFilePath;
     }
 
     public void setStarsNumber(int starsNumber) {
