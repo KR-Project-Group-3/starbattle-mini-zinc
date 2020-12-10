@@ -37,7 +37,7 @@ public class MatrixPanel extends JPanel {
         if (controller.getDimension() > 10)
         	cellsize = 35;
         if (controller.getDimension() > 15)
-        	cellsize = 29;
+        	cellsize = 30;
 
 
         GridBagConstraints gbc = new GridBagConstraints();

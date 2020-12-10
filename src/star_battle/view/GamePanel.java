@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,22 +28,17 @@ public class GamePanel extends JPanel implements KeyListener {
 
     private JPanel matrixPanel;
     private JPanel buttonsPanel;
-    private Image bgImage = null;
+    
     private int w, h;
 
     public GamePanel(Controller controller, int width, int height){
 
-        try {
-            this.bgImage = ImageIO.read(new File("images/paper_background.jpg"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         w = width;
         h = height;
-        //this.setPreferredSize(new Dimension(width, height));
-
+        
         this.addKeyListener(this);
-
+        
+        
         this.matrixPanel = new MatrixPanel(controller);
         matrixPanel.setPreferredSize(new Dimension(width, width));
 
@@ -107,8 +103,17 @@ public class GamePanel extends JPanel implements KeyListener {
 		});;
 		
         buttonsPanel.add(result);
-
-        this.mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, matrixPanel, buttonsPanel);
+        
+        JPanel logoPanel = new JPanel();
+        logoPanel.setOpaque(false);
+        logoPanel.add(new JLabel(new ImageIcon(Frame.logo)));
+        
+        JSplitPane splitMatrix = new JSplitPane(JSplitPane.VERTICAL_SPLIT, logoPanel, matrixPanel);
+        splitMatrix.setOpaque(false);
+        splitMatrix.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        splitMatrix.setDividerSize(0);
+        
+        this.mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitMatrix, buttonsPanel);
         this.mainPanel.setOpaque(false);
         this.mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         this.mainPanel.setDividerLocation(width/2 + 100);
@@ -121,9 +126,8 @@ public class GamePanel extends JPanel implements KeyListener {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(bgImage, 0, 0, w, h,null);
-
+        super.paintComponent(g); 
+        g.drawImage(Frame.bgImage, 0, 0, w, h, null);
     }
 
     @Override
