@@ -21,7 +21,6 @@ public class SolutionMatrix {
         this.instanceMatrix = instanceMatrix;
         this.generatedInstanceFilePath = "instance.dzn";
     }
-
     private void generateDataFile() throws IOException {
 
         Charset charset = StandardCharsets.US_ASCII;
@@ -91,6 +90,7 @@ public class SolutionMatrix {
         }
     }
 
+    // Dummy commit
     public boolean isMatrixInstantiated(){
         return this.solutionMatrix != null;
     }
