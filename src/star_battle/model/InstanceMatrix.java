@@ -1,12 +1,11 @@
 package star_battle.model;
 
-import star_battle.exceptions.InvalidInstanceDimensionException;
-import star_battle.exceptions.InvalidSectorValueException;
-import star_battle.exceptions.InvalidStarsNumberException;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InstanceMatrix {
 
@@ -15,85 +14,87 @@ public class InstanceMatrix {
     private int[][] sectorsMatrix;
     private String instanceFilePath;
 
-    public InstanceMatrix(String instanceFilePath){
-        this.instanceFilePath = instanceFilePath;
+    public InstanceMatrix(int level){
+
+        parseHTML(level);
+
     }
 
+    public InstanceMatrix(int[][] sectorsMatrix, int starsNumber){
+        this.sectorsMatrix = sectorsMatrix;
+        this.dimension = sectorsMatrix[0].length;
+        this.starsNumber = starsNumber;
+    }
 
-    public void parseMatrix() throws IOException, InvalidInstanceDimensionException, InvalidSectorValueException, InvalidStarsNumberException {
-
-        // Create the FileReader
-        FileReader fileReader = new FileReader(instanceFilePath);
-
-        // Create a BufferedReader to parse the instance file
-        BufferedReader br = new BufferedReader(fileReader);
-            
-        // Read the first line
-        String instaceLine = br.readLine();
-
-        // Parse all lines of the input instance file
-        for (int i = 0; instaceLine != null; ++i) {
-
-            // Jump the third line (no useful infos there)
-            if (i == 2 || (i >= 2 && i == 3 + this.dimension)) {
-                // Read another line
-                instaceLine = br.readLine();
-                continue;
-            }
-
-            // Put all elements, separated by a space, of the line into an array
-            String[] lineArray = instaceLine.split(" ");
-
-            // If we are parsing the size of the matrix and
-            // the stars number
-            if (i < 2) {
-
-                // Data files has always matrix dimension as second parameter
-                if (i == 1) {
-                    try {
-                        this.dimension = Integer.parseInt(lineArray[2].substring(0, lineArray[2].length() - 1));
-
-                        if(this.dimension <= 0)
-                            throw new InvalidInstanceDimensionException("Matrix dimension is not valid");
-
-                        this.sectorsMatrix = new int[this.dimension][this.dimension];
-
-                    } catch (NumberFormatException e) {
-                        throw new InvalidInstanceDimensionException("Matrix dimension is not valid");
-                    }
-
-                } else {
-
-                    // Data files has always star number as first parameter
-                    try {
-                        this.starsNumber = Integer.parseInt(lineArray[2].substring(0, lineArray[2].length() - 1));
-
-                        if(this.starsNumber <= 0)
-                            throw new InvalidStarsNumberException("Stars number is not valid");
-
-                    } catch (NumberFormatException e) {
-                        throw new InvalidStarsNumberException("Stars number is not valid");
-                    }
-                }
-
-            } else {
-
-                for (int j = 0; j < this.dimension; ++j) {
-                    try {
-                        // Remove the comma or the pipe after the sector value
-                        this.sectorsMatrix[i - 3][j] = Integer.parseInt(lineArray[j].substring(0, lineArray[j].length() - 1));
-                    } catch (NumberFormatException e) {
-                        throw new InvalidSectorValueException("Sector value is not valid");
-                    }
-                }
-            }
-
-            // Read another line
-            instaceLine = br.readLine();
+    private void parseHTML(int level){
+        String content = null;
+        URLConnection connection = null;
+        String pattern = "var task = '(.*?)'";
+        try {
+            connection =  new URL("https://puzzle-star-battle.com/?size="+level).openConnection();
+            Scanner scanner = new Scanner(connection.getInputStream());
+            scanner.useDelimiter("\\Z");
+            content = scanner.next();
+            scanner.close();
+        }catch ( Exception ex ) {
+            ex.printStackTrace();
         }
 
-        // Close the Stream
-        br.close();
+        Pattern r = Pattern.compile(pattern);
+        assert content != null;
+        Matcher m = r.matcher(content);
+
+        String[] tasks = null;
+        if (m.find( )) {
+            tasks = m.group(1).split(",");
+        }else {
+            throw new RuntimeException("Cannot read the instance! Please retry!");
+        }
+
+        this.dimension = (int)Math.sqrt(tasks.length);
+
+        r = Pattern.compile("<div class=\"puzzleInfo\"><p>.*/(\\d+?)");
+        m = r.matcher(content);
+
+        if (m.find( )) {
+            this.starsNumber = Integer.parseInt(m.group(1));
+        }else {
+            throw new RuntimeException("Cannot read the instance! Please retry!");
+        }
+
+        writeFile(tasks);
+    }
+
+    private void writeFile(String[] tasks){
+
+        try (FileWriter writer = new FileWriter("data/data.dzn");
+             BufferedWriter bw = new BufferedWriter(writer)) {
+            bw.write("num_stars = "+this.starsNumber+";\n");
+            bw.write("dim = " +this.dimension + ";\n");
+            bw.write("sectors = [|\n");
+            int i = 1;
+            int j = 0, k=0;
+
+            this.sectorsMatrix = new int[dimension][dimension];
+            for(String e: tasks) {
+                sectorsMatrix[k][j] = Integer.parseInt(e);
+                ++j;
+                if(i % this.dimension == 0){
+                   bw.write(e+"|\n");
+                   ++k;
+                   j=0;
+                }
+                else{
+                    bw.write(e+", ");
+                }
+                ++i;
+
+            }
+            bw.write("];");
+
+        } catch (IOException e) {
+            System.err.format("IOException: %s%n", e);
+        }
     }
 
     public int getDimension() {

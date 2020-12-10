@@ -37,19 +37,7 @@ public class Controller {
 	
 	public void loadNewInstance(int level){
 
-		matrix = new InstanceMatrix("data/data" + (level - 1) + ".dzn");
-		try {
-			matrix.parseMatrix();
-		} catch (IOException e) {
-			// TODO: Call a UI Method to show the error
-		} catch (InvalidStarsNumberException e){
-			// TODO: Call a UI Method to show the error
-		} catch (InvalidSectorValueException e){
-			// TODO: Call a UI Method to show the error
-		} catch (InvalidInstanceDimensionException e){
-			// TODO: Call a UI Method to show the error
-		}
-		
+		matrix = new InstanceMatrix(level - 1);
 		userMatrix = new UserMatrix(matrix.getDimension(), matrix.getStarsNumber());
 		solutionMatrix = new SolutionMatrix(matrix);
 		
