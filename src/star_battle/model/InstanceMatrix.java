@@ -3,6 +3,10 @@ package star_battle.model;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +28,7 @@ public class InstanceMatrix {
         this.sectorsMatrix = sectorsMatrix;
         this.dimension = sectorsMatrix[0].length;
         this.starsNumber = starsNumber;
+        this.writeFile();
     }
 
     private void parseHTML(int level){
@@ -79,8 +84,10 @@ public class InstanceMatrix {
 
     private void writeFile(String[] tasks){
 
-        try (FileWriter writer = new FileWriter("data/data.dzn");
-             BufferedWriter bw = new BufferedWriter(writer)) {
+        try {
+            Charset charset = StandardCharsets.US_ASCII;
+            BufferedWriter bw = new BufferedWriter(Files.newBufferedWriter(Path.of("data" + File.separator
+                    + "data.dzn"), charset));
             bw.write("num_stars = "+this.starsNumber+";\n");
             bw.write("dim = " +this.dimension + ";\n");
             bw.write("sectors = [|\n");
@@ -92,9 +99,13 @@ public class InstanceMatrix {
                 sectorsMatrix[k][j] = Integer.parseInt(e);
                 ++j;
                 if(i % this.dimension == 0){
-                   bw.write(e+"|\n");
-                   ++k;
-                   j=0;
+                    if(i < tasks.length) {
+                        bw.write(e + "|\n");
+                        ++k;
+                        j = 0;
+                    } else {
+                        bw.write(e + "|");
+                    }
                 }
                 else{
                     bw.write(e+", ");
@@ -102,10 +113,43 @@ public class InstanceMatrix {
                 ++i;
 
             }
+
             bw.write("];");
+            bw.close();
 
         } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
+        }
+    }
+
+    private void writeFile() {
+
+        Charset charset = StandardCharsets.US_ASCII;
+        try {
+            BufferedWriter writer = Files.newBufferedWriter(Path.of("data" + File.separator + "data.dzn"), charset);
+            String textToWrite = "num_stars = " + this.getStarsNumber() + ";\n";
+            textToWrite += "dim = " + this.getDimension() + ";\n" + "sectors = [|\n";
+
+            for (int i = 0; i < this.getDimension(); ++i) {
+                for (int j = 0; j < this.getDimension(); j++) {
+                    textToWrite += this.getSector(i, j);
+
+                    if (j < this.getDimension() - 1) {
+                        textToWrite += ", ";
+                    }
+                }
+
+                textToWrite += "|";
+
+                if (i < this.getDimension() - 1)
+                    textToWrite += "\n";
+            }
+
+            textToWrite += "];";
+            writer.write(textToWrite, 0, textToWrite.length());
+            writer.close();
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
 

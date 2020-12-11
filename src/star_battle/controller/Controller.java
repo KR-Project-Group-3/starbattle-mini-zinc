@@ -40,6 +40,11 @@ public class Controller {
 		matrix = new InstanceMatrix(level - 1);
 		userMatrix = new UserMatrix(matrix.getDimension(), matrix.getStarsNumber());
 		solutionMatrix = new SolutionMatrix(matrix);
+		try {
+			solutionMatrix.parseMatrix();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -155,14 +160,6 @@ public class Controller {
 	}
 	
 	public boolean hasUserWon() {
-
-		if(!this.solutionMatrix.isMatrixInstantiated()) {
-			try {
-				solutionMatrix.parseMatrix();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 
 		for(int i = 0; i < matrix.getDimension(); i++) {
 			for(int j = 0; j < matrix.getDimension(); j++) {

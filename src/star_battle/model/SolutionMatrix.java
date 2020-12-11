@@ -19,38 +19,11 @@ public class SolutionMatrix {
 
     public SolutionMatrix(InstanceMatrix instanceMatrix){
         this.instanceMatrix = instanceMatrix;
-        this.generatedInstanceFilePath = "instance.dzn";
-    }
-    private void generateDataFile() throws IOException {
-
-        Charset charset = StandardCharsets.US_ASCII;
-        BufferedWriter writer = Files.newBufferedWriter(Path.of(this.generatedInstanceFilePath), charset);
-        String textToWrite = "num_stars = " + this.instanceMatrix.getStarsNumber() + ";\n";
-        textToWrite += "dim = " + this.instanceMatrix.getDimension() + ";\n" + "sectors = [|\n";
-
-        for (int i = 0; i < instanceMatrix.getDimension(); ++i){
-            for (int j = 0; j < instanceMatrix.getDimension(); j++) {
-                textToWrite += this.instanceMatrix.getSector(i, j);
-
-                if(j < this.instanceMatrix.getDimension() - 1){
-                    textToWrite += ", ";
-                }
-            }
-
-            textToWrite += "|";
-
-            if(i < this.instanceMatrix.getDimension() - 1)
-                textToWrite += "\n";
-        }
-
-        textToWrite += "];";
-        writer.write(textToWrite, 0, textToWrite.length());
-        writer.close();
+        this.generatedInstanceFilePath = "data" + File.separator + "data.dzn";
     }
 
     public void parseMatrix() throws IOException {
 
-        generateDataFile();
         File instanceFile = new File(this.generatedInstanceFilePath);
 
         boolean isWindows = System.getProperty("os.name")
@@ -89,7 +62,6 @@ public class SolutionMatrix {
         }
     }
 
-    // Dummy commit
     public boolean isMatrixInstantiated(){
         return this.solutionMatrix != null;
     }
