@@ -37,7 +37,3 @@ constraint forall(i in ind)(sum(i2, j in ind where sectors[i2,j] == i)(matrix[i2
 solve satisfy;
 
 output[show_int(1, num_stars)];
-output["\n\n"];
-output [
-   show_int(1, matrix[i,j]) ++ if j == dim then "\n" else " " endif | i in ind, j in ind
-];
