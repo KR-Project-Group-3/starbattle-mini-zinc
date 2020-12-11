@@ -49,6 +49,7 @@ public class Controller {
 
 	public void loadNewInstance() throws IOException {
 		int matrixDimension = new Random().nextInt(4) + 5;
+		matrixDimension = 5;
 		ASPDynamicInstanceGenerator aspMatrixGenerator = new ASPDynamicInstanceGenerator(matrixDimension);
 		aspMatrixGenerator.generateInstances();
 		int[][] generatedMatrix = aspMatrixGenerator.getNextMatrix();

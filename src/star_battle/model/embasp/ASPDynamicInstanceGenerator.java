@@ -20,9 +20,11 @@ public class ASPDynamicInstanceGenerator {
     public ASPDynamicInstanceGenerator(int matrixDimension) {
         this.aspConnector =  new ASPConnector(this.encodingFilePath);
         this.matrixDimension = matrixDimension;
+        this.instanceReturned = 0;
     }
 
     public void generateInstances(){
+
         this.aspConnector.putFact("row(1.." + this.matrixDimension + ").");
         this.aspConnector.putFact("column(1.." + this.matrixDimension + ").");
         this.aspConnector.putFact("sector(1.." + this.matrixDimension + ").");
@@ -34,12 +36,11 @@ public class ASPDynamicInstanceGenerator {
         }
 
         this.answerSets = this.aspConnector.startSync();
-        this.instanceReturned = 0;
     }
 
     public int[][] getNextMatrix(){
 
-        if(this.answerSets.size() >= this.instanceReturned)
+        if(this.instanceReturned >= this.answerSets.size())
             return null;
 
         int[][] matrixToReturn = new int[this.matrixDimension][this.matrixDimension];
@@ -48,7 +49,7 @@ public class ASPDynamicInstanceGenerator {
             for (Object o : answerSet.getAtoms()) {
                 if(o instanceof MatrixSectorMapping) {
                     MatrixSectorMapping matrixSectorMapping = (MatrixSectorMapping) o;
-                    matrixToReturn[matrixSectorMapping.getRow()][matrixSectorMapping.getColumn()] =
+                    matrixToReturn[matrixSectorMapping.getRow() - 1][matrixSectorMapping.getColumn() - 1] =
                             matrixSectorMapping.getSector();
                 }
             }

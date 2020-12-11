@@ -1,7 +1,3 @@
-row(1..5).
-column(1..5).
-sector(1..5).
-
 cell(I,J) :- row(I), column(J).
 inMatrix(I,J,S)|outMatrix(I,J,S) :- cell(I,J), sector(S).
 

@@ -62,7 +62,7 @@ public class DynamicInstanceSolutionChecker {
     }
 
     public boolean checkUniqueSolution() throws IOException {
-        MiniZincConnector miniZincConnector = new MiniZincConnector( this.dynamicInstanceGeneratorModelFilePath,
+        MiniZincConnector miniZincConnector = new MiniZincConnector(this.dynamicInstanceGeneratorModelFilePath,
                 this.dynamicInstanceGeneratorDataFilePath);
 
         BufferedReader reader = miniZincConnector.returnResponse();

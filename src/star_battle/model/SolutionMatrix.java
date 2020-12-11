@@ -34,7 +34,7 @@ public class SolutionMatrix {
         this.solutionMatrix = new boolean[this.instanceMatrix.getDimension()][this.instanceMatrix.getDimension()];
         for (int i = 0; (line = reader.readLine()) != null; ++i) {
 
-            if(i == 0 || i == this.instanceMatrix.getDimension() + 1)
+            if(i == 0 || i >= this.instanceMatrix.getDimension() + 1)
                 continue;
 
             String[] lineArray = line.split(" ");
