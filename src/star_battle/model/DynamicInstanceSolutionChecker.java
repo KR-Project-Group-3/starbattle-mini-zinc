@@ -26,7 +26,7 @@ public class DynamicInstanceSolutionChecker {
         this.generatedMatrix = generatedMatrix;
         this.dimension = this.generatedMatrix[0].length;
         this.dynamicInstanceGeneratorDataFilePath = "data" + File.separator + "data.dzn";
-        this.dynamicInstanceGeneratorDataFilePath = "models" + File.separator + "instance_checker.dzn";
+        this.dynamicInstanceGeneratorModelFilePath = "models" + File.separator + "instance_checker.mzn";
         this.writeFile();
     }
 
@@ -70,15 +70,20 @@ public class DynamicInstanceSolutionChecker {
 
         ArrayList<Integer> starsSolutions = new ArrayList<>();
 
-        for (int i = 0; (line = reader.readLine()) != null; ++i) {
+        while((line = reader.readLine()) != null) {
 
             if (line.equals("=====UNSATISFABLE====="))
                 return false;
 
-            if (line.equals("----------"))
+            if (line.equals("----------") || line.equals("=========="))
                 continue;
 
             starsSolutions.add(Integer.parseInt(line));
+        }
+
+        if(starsSolutions.size() == 1){
+            this.generatedInstanceStarsNumber = starsSolutions.get(0);
+            return true;
         }
 
         starsSolutions.sort(Integer::compareTo);

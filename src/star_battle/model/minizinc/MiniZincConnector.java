@@ -25,12 +25,12 @@ public class MiniZincConnector {
 
         if(isWindows) {
             this.process = Runtime.getRuntime()
-                    .exec("minizinc models" + File.separator + "star_puzzle.mzn " +
+                    .exec("minizinc " + this.modelFilePath + " " +
                                     this.dataFilePath + " -a"
                             , null, new File(new File(instanceFile.getAbsoluteFile().getParent()).getParent()));
         } else {
             this.process = Runtime.getRuntime()
-                    .exec("minizinc models" + File.separator + "star_puzzle.mzn " +
+                    .exec("minizinc " + this.modelFilePath + " " +
                                     this.dataFilePath + " --solver Gecode -a", null,
                             new File(new File(instanceFile.getAbsoluteFile().getParent()).getParent()));
 
