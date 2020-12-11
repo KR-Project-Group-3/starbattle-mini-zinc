@@ -1,5 +1,7 @@
 package star_battle.model;
 
+import star_battle.model.minizinc.MiniZincConnector;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,6 +18,7 @@ public class SolutionMatrix {
     private boolean[][] solutionMatrix;
     private String generatedInstanceFilePath;
     private Process process;
+    private MiniZincConnector miniZincConnector;
 
     public SolutionMatrix(InstanceMatrix instanceMatrix){
         this.instanceMatrix = instanceMatrix;
@@ -23,26 +26,9 @@ public class SolutionMatrix {
     }
 
     public void parseMatrix() throws IOException {
-
-        File instanceFile = new File(this.generatedInstanceFilePath);
-
-        boolean isWindows = System.getProperty("os.name")
-                .toLowerCase().startsWith("windows");
-
-        if(isWindows) {
-            this.process = Runtime.getRuntime()
-                    .exec("minizinc models" + File.separator + "star_puzzle.mzn " +
-                                    this.generatedInstanceFilePath
-                            , null, new File(new File(instanceFile.getAbsoluteFile().getParent()).getParent()));
-        } else {
-            this.process = Runtime.getRuntime()
-                    .exec("minizinc models" + File.separator + "star_puzzle.mzn " +
-                            this.generatedInstanceFilePath + " --solver Gecode", null,
-                            new File(new File(instanceFile.getAbsoluteFile().getParent()).getParent()));
-        	
-        }
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        MiniZincConnector miniZincConnector = new MiniZincConnector("models" + File.separator + "star_puzzle.mzn",
+                this.generatedInstanceFilePath);
+        BufferedReader reader = miniZincConnector.returnResponse();
         String line = "";
 
         this.solutionMatrix = new boolean[this.instanceMatrix.getDimension()][this.instanceMatrix.getDimension()];

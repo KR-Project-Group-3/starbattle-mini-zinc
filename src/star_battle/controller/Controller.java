@@ -2,15 +2,14 @@ package star_battle.controller;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import star_battle.exceptions.InvalidInstanceDimensionException;
 import star_battle.exceptions.InvalidSectorValueException;
 import star_battle.exceptions.InvalidStarsNumberException;
-import star_battle.model.InstanceMatrix;
-import star_battle.model.LogicCell;
-import star_battle.model.SolutionMatrix;
-import star_battle.model.UserMatrix;
+import star_battle.model.*;
+import star_battle.model.embasp.ASPDynamicInstanceGenerator;
 
 
 public class Controller {
@@ -46,6 +45,28 @@ public class Controller {
 			e.printStackTrace();
 		}
 		
+	}
+
+	public void loadNewInstance() throws IOException {
+		int matrixDimension = new Random().nextInt(4) + 5;
+		ASPDynamicInstanceGenerator aspMatrixGenerator = new ASPDynamicInstanceGenerator(matrixDimension);
+		aspMatrixGenerator.generateInstances();
+		int[][] generatedMatrix = aspMatrixGenerator.getNextMatrix();
+		DynamicInstanceSolutionChecker instanceChecker = new DynamicInstanceSolutionChecker(generatedMatrix);
+
+		while(!instanceChecker.checkUniqueSolution()){
+			generatedMatrix = aspMatrixGenerator.getNextMatrix();
+			instanceChecker.loadNewMatrix(generatedMatrix);
+		}
+
+		InstanceMatrix dynamicInstanceMatrix = new InstanceMatrix(generatedMatrix, instanceChecker.getGeneratedInstanceStarsNumber());
+		userMatrix = new UserMatrix(matrix.getDimension(), matrix.getStarsNumber());
+		solutionMatrix = new SolutionMatrix(matrix);
+		try {
+			solutionMatrix.parseMatrix();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean differentSectorOfBottomCell(int i, int j) {
