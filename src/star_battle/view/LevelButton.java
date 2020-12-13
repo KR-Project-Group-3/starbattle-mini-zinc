@@ -34,8 +34,8 @@ public class LevelButton extends JLabel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        MenuButtonsPanel p = (MenuButtonsPanel) this.getParent();
-        p.createLevel(this.level);
+    	Frame f = (Frame) this.getTopLevelAncestor();
+    	f.createGame(level);
     }
 
     @Override

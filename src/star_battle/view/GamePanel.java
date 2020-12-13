@@ -1,5 +1,6 @@
 package star_battle.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -40,6 +41,9 @@ public class GamePanel extends JPanel implements KeyListener {
         
         
         this.matrixPanel = new MatrixPanel(controller);
+        this.setLayout(new BorderLayout());
+        
+        
         matrixPanel.setPreferredSize(new Dimension(width, width));
 
         this.buttonsPanel = new JPanel();

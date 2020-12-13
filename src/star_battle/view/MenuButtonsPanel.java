@@ -34,9 +34,4 @@ public class MenuButtonsPanel extends JPanel {
         }
 
     }
-
-    public void createLevel(int level){
-        Frame f = (Frame)this.getTopLevelAncestor();
-        f.createGame(level);
-    }
 }
