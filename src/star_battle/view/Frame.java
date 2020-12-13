@@ -54,6 +54,18 @@ public class Frame extends JFrame {
 		revalidate();
 	}
 
+	public void createDynamicGame() {
+
+		if(mainPanel != null) {
+			this.remove(mainPanel);
+		}
+
+		mainPanel = new GamePanel(this.controller, WIDTH, HEIGHT);
+		this.add(mainPanel, BorderLayout.CENTER);
+		mainPanel.requestFocus();
+		revalidate();
+	}
+
 	public void createMenu(){
 		if(mainPanel != null) {
 			this.remove(mainPanel);

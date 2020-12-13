@@ -31,7 +31,7 @@ public class RandomLevelButton extends JButton implements MouseListener {
 		}
 		
 		Frame f = (Frame) this.getTopLevelAncestor();
-		f.createGame(controller.getDimension());
+		f.createDynamicGame();
 	}
 		
 
