@@ -1,9 +1,13 @@
 package star_battle.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
+import javax.swing.JPanel;
 
 import star_battle.exceptions.InvalidInstanceDimensionException;
 import star_battle.exceptions.InvalidSectorValueException;
@@ -18,23 +22,34 @@ public class Controller {
 	private UserMatrix userMatrix;
 	private SolutionMatrix solutionMatrix;
 	
+	private List<LogicCell> fairCells; 
+	
 	private Set<LogicCell> stars;
 	private Set<LogicCell> violatedCells; 
 	private Set<LogicCell> rowCells;
 	private Set<LogicCell> columnCells;
 	private Set<LogicCell> sectorCells;
 	
+    private int instanceReturned;
+    private int givenHints;
+	
 	private int numStars;
 	
 	public Controller() { 
+		fairCells = new ArrayList<LogicCell>();
+		
 		stars = new HashSet<>();
 		violatedCells = new HashSet<>();
 		rowCells = new HashSet<>();
 		columnCells = new HashSet<>();
 		sectorCells = new HashSet<>();
+		
+		instanceReturned = 0;
+		givenHints = 0;
 	}
 	
 	public void loadNewInstance(int level){
+		givenHints = 0;
 
 		matrix = new InstanceMatrix(level - 1);
 		userMatrix = new UserMatrix(matrix.getDimension(), matrix.getStarsNumber());
@@ -44,18 +59,21 @@ public class Controller {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.getFairCells();
 		
 	}
 
 	public void loadNewInstance() throws IOException {
-		int matrixDimension = new Random().nextInt(4) + 5;
+		givenHints = 0;
+
+		int matrixDimension = new Random().nextInt(3) + 4;
 		ASPDynamicInstanceGenerator aspMatrixGenerator = new ASPDynamicInstanceGenerator(matrixDimension);
 		aspMatrixGenerator.generateInstances();
-		int[][] generatedMatrix = aspMatrixGenerator.getNextMatrix();
+		int[][] generatedMatrix = aspMatrixGenerator.getNextMatrix(instanceReturned);
 		DynamicInstanceSolutionChecker instanceChecker = new DynamicInstanceSolutionChecker(generatedMatrix);
 
 		while(!instanceChecker.checkUniqueSolution()){
-			generatedMatrix = aspMatrixGenerator.getNextMatrix();
+			generatedMatrix = aspMatrixGenerator.getNextMatrix(instanceReturned++);
 			instanceChecker.loadNewMatrix(generatedMatrix);
 		}
 
@@ -67,7 +85,21 @@ public class Controller {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
+		this.getFairCells();
+	}
+	
+	public void getFairCells() {
+		fairCells.clear();
+		
+		if(solutionMatrix.isMatrixInstantiated()) {
+			for(int i = 0; i < getDimension(); i++) {
+				for(int j = 0; j < getDimension(); j++) {
+					if(solutionMatrix.get(i, j))
+						fairCells.add(new LogicCell(i,j));
+				}
+			}
+		}
 	}
 
 	public boolean differentSectorOfBottomCell(int i, int j) {
@@ -190,5 +222,23 @@ public class Controller {
 			}
 		}
 		return true;
+	}
+
+	public boolean deservesHint() {
+		if(this.givenHints >= (this.getStarsNumber()*this.getDimension())/2)
+			return false;
+		return true;
+	}
+	
+	public LogicCell hint() {
+		if(!this.hasUserWon()) {
+			LogicCell cell = fairCells.get(new Random().nextInt(fairCells.size()));
+			while(userMatrix.get(cell.getI()+1, cell.getJ()+1))
+				cell = fairCells.get(new Random().nextInt(fairCells.size()));
+		
+			givenHints++;
+			return cell;
+		}
+		return null;
 	}
 }

@@ -89,6 +89,22 @@ public class MatrixPanel extends JPanel {
         }
     	
     }
+    
+    public void givesHint() {
+    	LogicCell logicCell = controller.hint();
+    	if(logicCell != null) {
+    		for(Cell c : cells) {
+    			if(c.getLogicCell().equals(logicCell)) {
+    				c.setText("\u2605");
+    				c.color(Color.BLACK);
+    				c.setFilled(true);
+    				controller.setStar(logicCell.getI(), logicCell.getJ(), true);
+    				colorCells(controller.checkConstraints());
+    				return;
+    			}
+    		}
+    	}
+    }
 
     public void setStar(int i, int j, boolean setOrDelete){
         controller.setStar(i, j, setOrDelete);

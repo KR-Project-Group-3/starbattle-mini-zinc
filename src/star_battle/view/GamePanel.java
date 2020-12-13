@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -50,62 +52,59 @@ public class GamePanel extends JPanel implements KeyListener {
         buttonsPanel.setOpaque(false);
        
         JLabel stars = new JLabel("\u2605 " + controller.getStarsNumber());
-        stars.setFont(new Font("Serif", Font.BOLD, 20));
+        stars.setFont(new Font("Serif", Font.PLAIN, 20));
         buttonsPanel.add(stars);
 
 		JLabel result = new JLabel();
-        result.setFont(new Font("Serif", Font.BOLD, 20));
+        result.setFont(new Font("Serif", Font.PLAIN, 20));
         
-        buttonsPanel.add(new JButton("Go back")).addMouseListener(new MouseListener() {
+        JLabel hintLabel = new JLabel();
+        hintLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+        
+        JButton goBack = new JButton("Go back");
+        goBack.addActionListener(new ActionListener() {
 			
 			@Override
-			public void mouseReleased(MouseEvent arg0) {}
-			
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				goBack();
+			public void actionPerformed(ActionEvent arg0) {
+				goBack();				
 			}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent arg0) {}
 		});
         
-        buttonsPanel.add(new JButton("Done!")).addMouseListener(new MouseListener() {
+        JButton hint = new JButton("Hint?");
+        hint.addActionListener(new ActionListener() {
 			
 			@Override
-			public void mouseReleased(MouseEvent arg0) {}
+			public void actionPerformed(ActionEvent arg0) {
+				if(controller.deservesHint())
+					((MatrixPanel) matrixPanel).givesHint();
+				else
+					hintLabel.setText("Too many hints!");
+			}
+		});
+        
+        JButton done = new JButton("Done");
+        done.addActionListener(new ActionListener() {
 			
 			@Override
-			public void mousePressed(MouseEvent arg0) {
-
+			public void actionPerformed(ActionEvent arg0) {
 				if(controller.hasUserWon()) {
-					result.setText("Good job!");
-					result.setForeground(Color.GREEN);
+					result.setText("Good j\u2605b!");
+					result.setForeground(Color.WHITE);
 					((MatrixPanel) matrixPanel).noMoreInGame();
 				}
 				
 				else {
 					result.setText("Keep trying!");
-					result.setForeground(Color.RED);
+					result.setForeground(Color.BLACK);
 				}
 			}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent arg0) {}
-		});;
-		
+		});
+        
+        buttonsPanel.add(goBack);
+        buttonsPanel.add(hint);
+        buttonsPanel.add(hintLabel);
+        
+        buttonsPanel.add(done);
         buttonsPanel.add(result);
         
         JPanel logoPanel = new JPanel();
@@ -126,6 +125,11 @@ public class GamePanel extends JPanel implements KeyListener {
         this.add(mainPanel);
         setFocusable(true);
         setVisible(true);
+    }
+    
+    public void addButtons() {
+    	
+    	
     }
 
     @Override

@@ -2,6 +2,7 @@ package star_battle.model.embasp;
 
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
+import it.unical.mat.embasp.base.OptionDescriptor;
 import it.unical.mat.embasp.languages.asp.ASPInputProgram;
 import it.unical.mat.embasp.languages.asp.AnswerSet;
 import it.unical.mat.embasp.languages.asp.AnswerSets;
@@ -51,6 +52,9 @@ public class ASPConnector {
     public List<AnswerSet> startSync(){
         handler.addProgram(facts);
         handler.addProgram(logicProgram);
+//        OptionDescriptor option = new OptionDescriptor();
+//        option.setOptions("-n 1");
+//        handler.addOption(option);
         AnswerSets answerSets = (AnswerSets) handler.startSync();
         return answerSets.getAnswersets();
     }

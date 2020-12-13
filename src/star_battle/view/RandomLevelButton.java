@@ -1,13 +1,10 @@
 package star_battle.view;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
 import star_battle.controller.Controller;
 
@@ -24,6 +21,7 @@ public class RandomLevelButton extends JButton implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
+		
 		try {
 			controller.loadNewInstance();
 		} catch (IOException e) {

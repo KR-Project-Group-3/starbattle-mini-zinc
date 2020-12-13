@@ -15,12 +15,10 @@ public class ASPDynamicInstanceGenerator {
     private final String encodingFilePath = "models" + File.separator + "instance_generator.asp";
     private int matrixDimension;
     private List<AnswerSet> answerSets;
-    private int instanceReturned;
 
     public ASPDynamicInstanceGenerator(int matrixDimension) {
         this.aspConnector =  new ASPConnector(this.encodingFilePath);
         this.matrixDimension = matrixDimension;
-        this.instanceReturned = 0;
     }
 
     public void generateInstances(){
@@ -38,13 +36,16 @@ public class ASPDynamicInstanceGenerator {
         this.answerSets = this.aspConnector.startSync();
     }
 
-    public int[][] getNextMatrix(){
+    public int[][] getNextMatrix(int instanceReturned){
 
-        if(this.instanceReturned >= this.answerSets.size())
-            return null;
-
+    	if(this.answerSets.isEmpty())
+    		System.out.println("ciao");
+    	
+        if(instanceReturned >= this.answerSets.size())
+             return null;
+        
         int[][] matrixToReturn = new int[this.matrixDimension][this.matrixDimension];
-        AnswerSet answerSet = this.answerSets.get(this.instanceReturned);
+        AnswerSet answerSet = this.answerSets.get(instanceReturned);
         try {
             for (Object o : answerSet.getAtoms()) {
                 if(o instanceof MatrixSectorMapping) {
@@ -57,7 +58,6 @@ public class ASPDynamicInstanceGenerator {
             e.printStackTrace();
         }
 
-        this.instanceReturned++;
         return matrixToReturn;
     }
 }
