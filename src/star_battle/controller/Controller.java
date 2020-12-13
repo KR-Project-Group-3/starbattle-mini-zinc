@@ -29,8 +29,7 @@ public class Controller {
 	private Set<LogicCell> rowCells;
 	private Set<LogicCell> columnCells;
 	private Set<LogicCell> sectorCells;
-	
-    private int instanceReturned;
+
     private int givenHints;
 	
 	private int numStars;
@@ -43,8 +42,6 @@ public class Controller {
 		rowCells = new HashSet<>();
 		columnCells = new HashSet<>();
 		sectorCells = new HashSet<>();
-		
-		instanceReturned = 0;
 		givenHints = 0;
 	}
 	
@@ -69,11 +66,11 @@ public class Controller {
 		int matrixDimension = new Random().nextInt(3) + 4;
 		ASPDynamicInstanceGenerator aspMatrixGenerator = new ASPDynamicInstanceGenerator(matrixDimension);
 		aspMatrixGenerator.generateInstances();
-		int[][] generatedMatrix = aspMatrixGenerator.getNextMatrix(instanceReturned);
+		int[][] generatedMatrix = aspMatrixGenerator.getNextMatrix();
 		DynamicInstanceSolutionChecker instanceChecker = new DynamicInstanceSolutionChecker(generatedMatrix);
 
 		while(!instanceChecker.checkUniqueSolution()){
-			generatedMatrix = aspMatrixGenerator.getNextMatrix(instanceReturned++);
+			generatedMatrix = aspMatrixGenerator.getNextMatrix();
 			instanceChecker.loadNewMatrix(generatedMatrix);
 		}
 
