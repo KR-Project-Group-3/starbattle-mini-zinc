@@ -30,6 +30,12 @@ public class ASPConnector {
         facts = new ASPInputProgram();
         logicProgram = new ASPInputProgram();
         logicProgram.addFilesPath(logicProgramPath);
+
+        OptionDescriptor optionDescriptor = new OptionDescriptor();
+        optionDescriptor.setOptions("-n 0");
+
+        // Remove comment to compute all possible Answer Sets
+        // handler.addOption(optionDescriptor);
     }
 
     public void clear(){
@@ -52,9 +58,6 @@ public class ASPConnector {
     public List<AnswerSet> startSync(){
         handler.addProgram(facts);
         handler.addProgram(logicProgram);
-//        OptionDescriptor option = new OptionDescriptor();
-//        option.setOptions("-n 1");
-//        handler.addOption(option);
         AnswerSets answerSets = (AnswerSets) handler.startSync();
         return answerSets.getAnswersets();
     }

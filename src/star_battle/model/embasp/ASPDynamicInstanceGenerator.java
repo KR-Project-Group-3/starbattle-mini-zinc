@@ -7,7 +7,9 @@ import it.unical.mat.embasp.languages.asp.AnswerSet;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ASPDynamicInstanceGenerator {
 
@@ -15,12 +17,12 @@ public class ASPDynamicInstanceGenerator {
     private final String encodingFilePath = "models" + File.separator + "instance_generator.asp";
     private int matrixDimension;
     private List<AnswerSet> answerSets;
-    private int instanceReturned;
+    private ArrayList<Integer> instancesReturned;
 
     public ASPDynamicInstanceGenerator(int matrixDimension) {
         this.aspConnector =  new ASPConnector(this.encodingFilePath);
         this.matrixDimension = matrixDimension;
-        this.instanceReturned = 0;
+        this.instancesReturned = new ArrayList<>();
     }
 
     public void generateInstances(){
@@ -40,11 +42,17 @@ public class ASPDynamicInstanceGenerator {
 
     public int[][] getNextMatrix(){
     	
-        if(instanceReturned >= this.answerSets.size())
+        if(instancesReturned.size() >= this.answerSets.size())
              return null;
         
         int[][] matrixToReturn = new int[this.matrixDimension][this.matrixDimension];
-        AnswerSet answerSet = this.answerSets.get(instanceReturned);
+        int instanceIndexToReturn = new Random().nextInt(this.answerSets.size());
+        while (instancesReturned.contains(instanceIndexToReturn))
+            instanceIndexToReturn = new Random().nextInt(this.answerSets.size());
+
+        AnswerSet answerSet = this.answerSets.get(instanceIndexToReturn);
+        instancesReturned.add(instanceIndexToReturn);
+
         try {
             for (Object o : answerSet.getAtoms()) {
                 if(o instanceof MatrixSectorMapping) {
@@ -57,7 +65,6 @@ public class ASPDynamicInstanceGenerator {
             e.printStackTrace();
         }
 
-        this.instanceReturned++;
         return matrixToReturn;
     }
 }
