@@ -12,13 +12,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class SolutionMatrix {
+public class SolutionMatrix extends Thread{
 
     private InstanceMatrix instanceMatrix;
     private boolean[][] solutionMatrix;
     private String generatedInstanceFilePath;
     private Process process;
     private MiniZincConnector miniZincConnector;
+    private boolean finished = false;
 
     public SolutionMatrix(InstanceMatrix instanceMatrix){
         this.instanceMatrix = instanceMatrix;
@@ -47,6 +48,17 @@ public class SolutionMatrix {
                     solutionMatrix[i - 1][j] = false;
             }
         }
+        this.finished = true;
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        try {
+            parseMatrix();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isMatrixInstantiated(){
@@ -55,5 +67,9 @@ public class SolutionMatrix {
     
     public boolean get(int i, int j) {
     	return solutionMatrix[i][j];
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 }
