@@ -32,6 +32,8 @@ public class SolutionMatrix extends Thread{
             }
             System.out.println();
         }
+
+        this.finished = true;
     }
 
     public void parseMatrix() throws IOException {

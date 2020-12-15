@@ -75,10 +75,15 @@ public class GamePanel extends JPanel implements KeyListener {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(controller.deservesHint())
-					((MatrixPanel) matrixPanel).givesHint();
-				else
-					hintLabel.setText("Too many hints!");
+                if(controller.isSolutionReady()) {
+                    if (controller.deservesHint())
+                        ((MatrixPanel) matrixPanel).givesHint();
+                    else
+                        hintLabel.setText("Too many hints!");
+                } else {
+                    hintLabel.setText("Please wait...");
+                    hintLabel.setForeground(Color.BLACK);
+                }
 			}
 		});
         
@@ -87,23 +92,22 @@ public class GamePanel extends JPanel implements KeyListener {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(controller.hasUserWon() == 1) {
-					result.setText("Good j\u2605b!");
-					result.setForeground(Color.WHITE);
-					((MatrixPanel) matrixPanel).noMoreInGame();
-				}
-				
-				else if (controller.hasUserWon() == 0){
-					result.setText("Keep trying!");
-					result.setForeground(Color.BLACK);
-				}
 
-				else  {
-                    result.setText("WAIT A MOMENT!");
-                    result.setForeground(Color.RED);
+			    if(controller.isSolutionReady()) {
+                    if (controller.hasUserWon()) {
+                        result.setText("Good j\u2605b!");
+                        result.setForeground(Color.WHITE);
+                        ((MatrixPanel) matrixPanel).noMoreInGame();
+                    } else {
+                        result.setText("Keep trying!");
+                        result.setForeground(Color.BLACK);
+                    }
+                } else {
+                    result.setText("Please wait...");
+                    result.setForeground(Color.BLACK);
                 }
-			}
-		});
+		    }
+        });
         
         buttonsPanel.add(goBack);
         buttonsPanel.add(hint);

@@ -205,20 +205,15 @@ public class Controller {
 		return (HashSet<LogicCell>) violatedCells;
 	}
 	
-	public int hasUserWon() {
-		if(solutionMatrix.isFinished()){
+	public boolean hasUserWon() {
 			for(int i = 0; i < matrix.getDimension(); i++) {
 				for(int j = 0; j < matrix.getDimension(); j++) {
 					if(userMatrix.get(i + 1, j + 1) != solutionMatrix.get(i, j))
-						return 0;
+						return false;
 				}
 			}
-			return 1;
-		}
-		else {
-			return -1;
-		}
 
+			return true;
 	}
 
 	public boolean deservesHint() {
@@ -228,9 +223,10 @@ public class Controller {
 	}
 	
 	public LogicCell hint() {
-		if(this.solutionMatrix.isFinished()){
+
 			this.getFairCells();
-			if(this.hasUserWon() == 0) {
+
+			if(!this.hasUserWon()) {
 				LogicCell cell = fairCells.get(new Random().nextInt(fairCells.size()));
 				while(userMatrix.get(cell.getI()+1, cell.getJ()+1))
 					cell = fairCells.get(new Random().nextInt(fairCells.size()));
@@ -238,9 +234,12 @@ public class Controller {
 				givenHints++;
 				return cell;
 			}
+
 			return null;
-		}
-		return null;
+	}
+
+	public boolean isSolutionReady(){
+		return this.solutionMatrix.isFinished();
 	}
 
 	public InstanceMatrix getMatrix() {
