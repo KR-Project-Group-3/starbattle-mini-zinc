@@ -3,15 +3,8 @@ package star_battle.model;
 import star_battle.model.minizinc.MiniZincConnector;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 public class SolutionMatrix {
 
     private InstanceMatrix instanceMatrix;
@@ -23,6 +16,20 @@ public class SolutionMatrix {
     public SolutionMatrix(InstanceMatrix instanceMatrix){
         this.instanceMatrix = instanceMatrix;
         this.generatedInstanceFilePath = "data" + File.separator + "data.dzn";
+    }
+
+    public SolutionMatrix(boolean[][] solutionMatrix){
+        this.solutionMatrix = solutionMatrix;
+
+        for (int i = 0; i < solutionMatrix.length; i++) {
+            for (int j = 0; j < solutionMatrix.length; j++) {
+                if (solutionMatrix[i][j])
+                    System.out.print("1 ");
+                else
+                    System.out.print("0 ");
+            }
+            System.out.println();
+        }
     }
 
     public void parseMatrix() throws IOException {

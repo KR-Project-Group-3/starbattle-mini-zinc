@@ -13,7 +13,6 @@ import star_battle.exceptions.InvalidInstanceDimensionException;
 import star_battle.exceptions.InvalidSectorValueException;
 import star_battle.exceptions.InvalidStarsNumberException;
 import star_battle.model.*;
-import star_battle.model.embasp.ASPDynamicInstanceGenerator;
 
 
 public class Controller {
@@ -61,28 +60,30 @@ public class Controller {
 	}
 
 	public void loadNewInstance() throws IOException {
+
 		givenHints = 0;
 
-		int matrixDimension = new Random().nextInt(3) + 4;
-		ASPDynamicInstanceGenerator aspMatrixGenerator = new ASPDynamicInstanceGenerator(matrixDimension);
-		aspMatrixGenerator.generateInstances();
-		int[][] generatedMatrix = aspMatrixGenerator.getNextMatrix();
-		DynamicInstanceSolutionChecker instanceChecker = new DynamicInstanceSolutionChecker(generatedMatrix);
+		int level = 0;
 
-		while(!instanceChecker.checkUniqueSolution()){
-			generatedMatrix = aspMatrixGenerator.getNextMatrix();
-			instanceChecker.loadNewMatrix(generatedMatrix);
+		InstanceMatrix instanceMatrix = new InstanceMatrix(level);
+		for (int i = 0; i < instanceMatrix.getDimension(); i++) {
+
+			int row = new Random().nextInt(instanceMatrix.getDimension());
+			int column = new Random().nextInt(instanceMatrix.getDimension());
+			while (instanceMatrix.getSector(row, column) == 0){
+
+				row = new Random().nextInt(instanceMatrix.getDimension());
+				column = new Random().nextInt(instanceMatrix.getDimension());
+			}
+
+			instanceMatrix.setSector(row, column, 0);
+
 		}
 
-		matrix = new InstanceMatrix(generatedMatrix, instanceChecker.getGeneratedInstanceStarsNumber());
+		DynamicInstanceSolutionChecker instanceSolutionChecker = new DynamicInstanceSolutionChecker(instanceMatrix.getSectorsMatrix());
+		matrix = new InstanceMatrix(instanceSolutionChecker.retrieveDynamicInstancesSectors(), 1);
 		userMatrix = new UserMatrix(matrix.getDimension(), matrix.getStarsNumber());
-		solutionMatrix = new SolutionMatrix(matrix);
-		try {
-			solutionMatrix.parseMatrix();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		solutionMatrix = new SolutionMatrix(instanceSolutionChecker.getSolutionMatrix());
 		this.getFairCells();
 	}
 	

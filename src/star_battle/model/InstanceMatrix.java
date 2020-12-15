@@ -168,4 +168,12 @@ public class InstanceMatrix {
     public int getSector(int row, int column) {
         return sectorsMatrix[row][column];
     }
+
+    public void setSector(int row, int column, int sector){
+        sectorsMatrix[row][column] = sector;
+    }
+
+    public int[][] getSectorsMatrix() {
+        return sectorsMatrix;
+    }
 }
