@@ -52,7 +52,6 @@ public class Controller {
 		userMatrix = new UserMatrix(matrix.getDimension(), matrix.getStarsNumber());
 		solutionMatrix = new SolutionMatrix(matrix);
 		solutionMatrix.start();
-		this.getFairCells();
 	}
 
 	public void loadNewInstance() throws IOException {
@@ -228,14 +227,22 @@ public class Controller {
 	}
 	
 	public LogicCell hint() {
-		if(this.hasUserWon() == 0) {
-			LogicCell cell = fairCells.get(new Random().nextInt(fairCells.size()));
-			while(userMatrix.get(cell.getI()+1, cell.getJ()+1))
-				cell = fairCells.get(new Random().nextInt(fairCells.size()));
-		
-			givenHints++;
-			return cell;
+		if(this.solutionMatrix.isFinished()){
+			this.getFairCells();
+			if(this.hasUserWon() == 0) {
+				LogicCell cell = fairCells.get(new Random().nextInt(fairCells.size()));
+				while(userMatrix.get(cell.getI()+1, cell.getJ()+1))
+					cell = fairCells.get(new Random().nextInt(fairCells.size()));
+
+				givenHints++;
+				return cell;
+			}
+			return null;
 		}
 		return null;
+	}
+
+	public InstanceMatrix getMatrix() {
+		return matrix;
 	}
 }

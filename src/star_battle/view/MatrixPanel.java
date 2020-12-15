@@ -17,9 +17,31 @@ public class MatrixPanel extends JPanel {
     
     private Controller controller = null;
 
+    private final ArrayList<Color> colors = new ArrayList<>();
+
+
     public MatrixPanel(Controller controller) {
 
         super();
+        colors.add(new Color(255,102,102));
+        colors.add(new Color(255,255,255));
+        colors.add(new Color(51,204, 255));
+        colors.add(new Color(102,255,102));
+        colors.add(new Color(255,153, 1));
+        colors.add(new Color(103,2, 1));
+        colors.add(Color.PINK);
+        colors.add(Color.YELLOW);
+        colors.add(Color.MAGENTA);
+        colors.add(new Color(0,102,0));
+        colors.add(new Color(204, 0, 0));
+        colors.add(Color.BLUE);
+        colors.add(new Color(127, 255, 212));
+        colors.add(new Color(102, 0, 153));
+        colors.add(new Color(153, 102, 0));
+        colors.add(new Color(95,158, 160));
+        colors.add(Color.gray);
+
+
         this.controller = controller;
         this.rows = controller.getDimension();
         inGame = true;
@@ -45,7 +67,8 @@ public class MatrixPanel extends JPanel {
             for (int j = 0; j < rows; j++) {
                 gbc.gridx = j;
                 gbc.gridy = i;
-                Cell l = new Cell(cellsize, i, j);
+                int colorCode = controller.getMatrix().getSector(i,j) - 1;
+                Cell l = new Cell(cellsize, i, j, colors.get(colorCode));
                 cells.add(l);
                 this.manageLabel(i, j, l, gbc);
             }

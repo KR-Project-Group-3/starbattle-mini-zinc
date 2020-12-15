@@ -16,11 +16,11 @@ public class Cell extends JLabel implements MouseListener {
     private int size;
     private LogicCell logicCell = null;
     
-    public Cell(int size, int i, int j){
+    public Cell(int size, int i, int j, Color color){
 
         this.size = size;
         this.logicCell = new LogicCell(i, j);
-        setBackground(Color.WHITE);
+        setBackground(color);
         setOpaque(true);
         setHorizontalAlignment(CENTER);
         setFont(new Font("Serif", Font.BOLD, size/2));
