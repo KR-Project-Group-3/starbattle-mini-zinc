@@ -50,13 +50,8 @@ public class Controller {
 		matrix = new InstanceMatrix(level - 1);
 		userMatrix = new UserMatrix(matrix.getDimension(), matrix.getStarsNumber());
 		solutionMatrix = new SolutionMatrix(matrix);
-		try {
-			solutionMatrix.parseMatrix();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		solutionMatrix.start();
 		this.getFairCells();
-		
 	}
 
 	public void loadNewInstance() throws IOException {
@@ -211,15 +206,20 @@ public class Controller {
 		return (HashSet<LogicCell>) violatedCells;
 	}
 	
-	public boolean hasUserWon() {
-
-		for(int i = 0; i < matrix.getDimension(); i++) {
-			for(int j = 0; j < matrix.getDimension(); j++) {
-				if(userMatrix.get(i + 1, j + 1) != solutionMatrix.get(i, j))
-					return false;
+	public int hasUserWon() {
+		if(solutionMatrix.isFinished()){
+			for(int i = 0; i < matrix.getDimension(); i++) {
+				for(int j = 0; j < matrix.getDimension(); j++) {
+					if(userMatrix.get(i + 1, j + 1) != solutionMatrix.get(i, j))
+						return 0;
+				}
 			}
+			return 1;
 		}
-		return true;
+		else {
+			return -1;
+		}
+
 	}
 
 	public boolean deservesHint() {
@@ -229,7 +229,7 @@ public class Controller {
 	}
 	
 	public LogicCell hint() {
-		if(!this.hasUserWon()) {
+		if(this.hasUserWon() == 0) {
 			LogicCell cell = fairCells.get(new Random().nextInt(fairCells.size()));
 			while(userMatrix.get(cell.getI()+1, cell.getJ()+1))
 				cell = fairCells.get(new Random().nextInt(fairCells.size()));

@@ -87,16 +87,21 @@ public class GamePanel extends JPanel implements KeyListener {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(controller.hasUserWon()) {
+				if(controller.hasUserWon() == 1) {
 					result.setText("Good j\u2605b!");
 					result.setForeground(Color.WHITE);
 					((MatrixPanel) matrixPanel).noMoreInGame();
 				}
 				
-				else {
+				else if (controller.hasUserWon() == 0){
 					result.setText("Keep trying!");
 					result.setForeground(Color.BLACK);
 				}
+
+				else  {
+                    result.setText("WAIT A MOMENT!");
+                    result.setForeground(Color.RED);
+                }
 			}
 		});
         
