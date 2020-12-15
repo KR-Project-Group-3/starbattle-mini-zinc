@@ -3,14 +3,8 @@ package star_battle.model;
 import star_battle.model.minizinc.MiniZincConnector;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class SolutionMatrix extends Thread{
 
@@ -26,6 +20,20 @@ public class SolutionMatrix extends Thread{
         this.generatedInstanceFilePath = "data" + File.separator + "data.dzn";
     }
 
+    public SolutionMatrix(boolean[][] solutionMatrix){
+        this.solutionMatrix = solutionMatrix;
+
+        for (int i = 0; i < solutionMatrix.length; i++) {
+            for (int j = 0; j < solutionMatrix.length; j++) {
+                if (solutionMatrix[i][j])
+                    System.out.print("1 ");
+                else
+                    System.out.print("0 ");
+            }
+            System.out.println();
+        }
+    }
+
     public void parseMatrix() throws IOException {
         MiniZincConnector miniZincConnector = new MiniZincConnector("models" + File.separator + "star_puzzle.mzn",
                 this.generatedInstanceFilePath);
@@ -35,7 +43,7 @@ public class SolutionMatrix extends Thread{
         this.solutionMatrix = new boolean[this.instanceMatrix.getDimension()][this.instanceMatrix.getDimension()];
         for (int i = 0; (line = reader.readLine()) != null; ++i) {
 
-            if(i == 0 || i >= this.instanceMatrix.getDimension() + 1)
+            if(i >= this.instanceMatrix.getDimension())
                 continue;
 
             String[] lineArray = line.split(" ");
@@ -43,9 +51,9 @@ public class SolutionMatrix extends Thread{
             for (int j = 0; j < this.instanceMatrix.getDimension(); j++) {
 
                 if(Integer.parseInt(lineArray[j]) == 1)
-                    solutionMatrix[i - 1][j] = true;
+                    solutionMatrix[i][j] = true;
                 else
-                    solutionMatrix[i - 1][j] = false;
+                    solutionMatrix[i][j] = false;
             }
         }
         this.finished = true;

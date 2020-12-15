@@ -14,33 +14,51 @@ import java.util.ArrayList;
 
 public class DynamicInstanceSolutionChecker {
 
-    private int[][] generatedMatrix;
     private int dimension;
     private MiniZincConnector miniZincConnector;
     private String dynamicInstanceGeneratorDataFilePath;
     private int generatedInstanceStarsNumber;
     private String dynamicInstanceGeneratorModelFilePath;
+    private String solutionCheckerDataFilePath;
+    private String solutionCheckerModelFilePath;
+    private boolean[][] solutionMatrix;
 
 
     public DynamicInstanceSolutionChecker(int[][] generatedMatrix){
-        this.generatedMatrix = generatedMatrix;
-        this.dimension = this.generatedMatrix[0].length;
-        this.dynamicInstanceGeneratorDataFilePath = "data" + File.separator + "data.dzn";
-        this.dynamicInstanceGeneratorModelFilePath = "models" + File.separator + "instance_checker.mzn";
-        this.writeFile();
+        this.dimension = generatedMatrix[0].length;
+        this.solutionMatrix = new boolean[this.dimension][this.dimension];
+        this.solutionCheckerDataFilePath = "data" + File.separator + "data_optional_scheck.dzn";
+        this.solutionCheckerModelFilePath = "models" + File.separator + "star_puzzle.mzn";
+        this.dynamicInstanceGeneratorDataFilePath = "data" + File.separator + "data_optional.dzn";
+        this.dynamicInstanceGeneratorModelFilePath = "models" + File.separator + "dynamic_star_puzzle.mzn";
+        this.writeFile(this.dynamicInstanceGeneratorDataFilePath, generatedMatrix, true);
     }
 
-    private void writeFile() {
+    private void writeFile(String dataFileToWritePath, int[][] generatedMatrix, boolean optionalSectors) {
 
         Charset charset = StandardCharsets.US_ASCII;
         try {
-            BufferedWriter writer = Files.newBufferedWriter(Path.of(this.dynamicInstanceGeneratorDataFilePath),
+            BufferedWriter writer = Files.newBufferedWriter(Path.of(dataFileToWritePath),
                     charset);
-            String textToWrite = "dim = " + this.getDimension() + ";\n" + "sectors = [|\n";
+
+            String matrixName;
+            String textToWrite = "dim = " + this.getDimension() + ";\n";
+
+            if(optionalSectors) {
+                matrixName = "init_sectors";
+            } else {
+                textToWrite += "num_stars = 1;\n";
+                matrixName = "sectors";
+            }
+
+            textToWrite += matrixName + " = [|\n";
 
             for (int i = 0; i < this.getDimension(); ++i) {
                 for (int j = 0; j < this.getDimension(); j++) {
-                    textToWrite += generatedMatrix[i][j];
+                    if(generatedMatrix[i][j] == 0)
+                        textToWrite += "<>";
+                    else
+                        textToWrite += generatedMatrix[i][j];
 
                     if (j < this.getDimension() - 1) {
                         textToWrite += ", ";
@@ -61,60 +79,82 @@ public class DynamicInstanceSolutionChecker {
         }
     }
 
-    public boolean checkUniqueSolution() throws IOException {
+    public boolean checkUniqueSolution (int[][] instancedMatrix) throws IOException {
+
+        writeFile(this.solutionCheckerDataFilePath, instancedMatrix, false);
+
+        MiniZincConnector miniZincConnector = new MiniZincConnector(this.solutionCheckerModelFilePath,
+                this.solutionCheckerDataFilePath);
+
+        BufferedReader reader = miniZincConnector.returnResponse();
+
+        String line = "";
+
+        for (int i = 0; (line = reader.readLine()) != null; ++i) {
+
+            if (line.equals("=====UNSATISFIABLE====="))
+                return false;
+
+            String[] lineArray = line.split(" ");
+            String last;
+
+
+            if (line.equals("----------")){
+                if(!reader.readLine().equals("=========="))
+                    return false;
+            } else {
+
+
+                for (int j = 0; j < this.dimension; j++) {
+
+                    if (Integer.parseInt(lineArray[j]) == 1)
+                        solutionMatrix[i][j] = true;
+                    else
+                        solutionMatrix[i][j] = false;
+                }
+
+            }
+
+        }
+
+        return true;
+    }
+
+    public int[][] retrieveDynamicInstancesSectors() throws IOException {
         MiniZincConnector miniZincConnector = new MiniZincConnector(this.dynamicInstanceGeneratorModelFilePath,
                 this.dynamicInstanceGeneratorDataFilePath);
 
         BufferedReader reader = miniZincConnector.returnResponse();
         String line = "";
 
-        ArrayList<Integer> starsSolutions = new ArrayList<>();
+        int[][] dynamicMatrix = new int[this.dimension][this.dimension];
 
-        while((line = reader.readLine()) != null) {
 
-            if (line.equals("=====UNSATISFABLE====="))
-                return false;
+        for (int i = 0; (line = reader.readLine()) != null; ++i) {
 
-            if (line.equals("----------") || line.equals("=========="))
-                continue;
+            String[] lineArray = line.split(" ");
 
-            starsSolutions.add(Integer.parseInt(line));
-        }
+            if (line.equals("----------") || line.equals("==========")){
+                if(checkUniqueSolution(dynamicMatrix))
+                    return dynamicMatrix;
 
-        if(starsSolutions.size() == 1){
-            this.generatedInstanceStarsNumber = starsSolutions.get(0);
-            return true;
-        }
-
-        starsSolutions.sort(Integer::compareTo);
-
-        int counter = 0;
-        for (int i = 0; i < starsSolutions.size() - 1; i++) {
-            if(!(starsSolutions.get(i).equals(starsSolutions.get(i + 1)))) {
-                if(counter == 0) {
-                    this.generatedInstanceStarsNumber = starsSolutions.get(i);
-                    return true;
-                } else {
-                    counter = 0;
-                }
+                i = -1;
             } else {
-                counter++;
+
+                for (int j = 0; j < this.dimension; j++)
+                    dynamicMatrix[i][j] = Integer.parseInt(lineArray[j]);
             }
+
         }
 
-        return false;
+        return null;
+    }
+
+    public boolean[][] getSolutionMatrix() {
+        return solutionMatrix;
     }
 
     public int getDimension() {
         return dimension;
-    }
-
-    public int getGeneratedInstanceStarsNumber() {
-        return generatedInstanceStarsNumber;
-    }
-
-    public void loadNewMatrix(int[][] generatedMatrix){
-        this.generatedMatrix = generatedMatrix;
-        writeFile();
     }
 }
