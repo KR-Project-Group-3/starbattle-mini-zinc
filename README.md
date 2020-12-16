@@ -8,7 +8,7 @@ In a nxn matrix, you must place a fixed number of stars in order to satify some 
 * Every star you placed, can't have another vertically, horizontally, or diagonally adjacent star.
 
 ## Example
-[!Screenshot]("resources/ScreenShot.png")
+<img src="https://github.com/KR-Project-Group-3/starbattle-mini-zinc/blob/master/resources/ScreenShot.png" alt="ScreenShot">
 
 ## Prerequisites
 Java 8+, Minizinc Solver
