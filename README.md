@@ -21,3 +21,4 @@ Java 8+, Minizinc Solver
 Accademical project at University of Calabria
 
 ## Licence
+[![license](https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square)](https://github.com/KR-Project-Group-3/starbattle-mini-zinc/blob/master/LICENSE)
